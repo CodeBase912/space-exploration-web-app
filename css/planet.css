@@ -1,0 +1,228 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  font-family: "Quicksand", "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+    sans-serif;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background: black;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+/* Style the header */
+
+header {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  color: #b5b5b5;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 5;
+  /* background: lightcoral; */
+}
+
+header .logo-wrapper p {
+  font-size: 25px;
+}
+
+header .icon-wrapper {
+  width: 30px;
+  height: 100%;
+  display: flex;
+  /* background: lightblue; */
+}
+
+header .icon-wrapper #close-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+/* Style the main */
+
+main {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+
+.content-section {
+  width: 60%;
+  height: 100vh;
+  background: black;
+  display: flex;
+}
+
+.content-section .img-wrapper {
+  width: 200px;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+}
+
+.content-section .img-wrapper .bakcground-img {
+  position: absolute;
+  width: 500px;
+  bottom: 0px;
+  left: 0px;
+}
+
+.content-section .content-wrapper {
+  width: calc(100% - 200px);
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(68, 68, 68, 0.3),
+    rgba(0, 0, 0, 0)
+  );
+  padding: 200px 10px 10px 20px;
+  z-index: 2;
+  backdrop-filter: blur(30px black);
+  border-right: 1px solid rgba(68, 68, 68, 0.3);
+  border-left: 1px solid rgba(68, 68, 68, 0.3);
+}
+
+.content-section .content-wrapper h1 {
+  font-size: 80px;
+  color: #b5b5b5;
+}
+
+.content-section .content-wrapper p {
+  margin: 0 0 20px 0;
+  color: #717171;
+}
+
+.planet-section {
+  width: 40%;
+  height: 100vh;
+  /* background: lightgreen; */
+  display: flex;
+  position: relative;
+}
+
+.planet-section .divider {
+  width: 50%;
+  height: 100%;
+}
+
+.planet-section .right-section {
+  border-left: 2px solid rgba(68, 68, 68, 0.3);
+}
+
+.planet-section .planet-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 51px);
+  margin: 51px 0 0 0;
+  padding: 0 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.planet-section .planet-content .user-data-wrapper {
+  width: 100%;
+  /* background: lightblue; */
+  display: flex;
+}
+
+.planet-section .planet-content .user-data-wrapper .user-wrapper {
+  width: 50%;
+  padding: 10px;
+}
+
+.planet-section .planet-content .user-data-wrapper .user-wrapper h3 {
+  color: #b5b5b5;
+  font-size: 15px;
+}
+
+.planet-section .planet-content .user-data-wrapper .user-wrapper p {
+  color: #717171;
+  font-size: 12px;
+}
+
+.planet-section .planet-content .user-data-wrapper .user-wrapper .user-age,
+.planet-section .planet-content .user-data-wrapper .user-wrapper .user-weight {
+  color: #4a53d1;
+}
+
+.planet-section .planet-content .canvas-wrapper {
+  height: calc(100vh * 0.6);
+  width: 100%;
+  max-width: 550px;
+  /* background: lightblue; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 1000px) {
+  body {
+    overflow-y: auto;
+  }
+
+  main {
+    flex-direction: column-reverse;
+    max-width: 100vw;
+  }
+
+  .content-section {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    position: absolute;
+    top: 100vh;
+  }
+
+  .planet-section {
+    width: 100%;
+    height: 100vh;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .content-section .img-wrapper {
+    width: 80px;
+  }
+
+  .content-section .img-wrapper .bakcground-img {
+    width: 100vw;
+    height: 100vw;
+  }
+
+  .content-section .content-wrapper {
+    width: calc(100% - 80px);
+    border-right: none;
+    border-top: 1px solid rgba(68, 68, 68, 0.3);
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .content-section .img-wrapper {
+    width: 20px;
+  }
+  .content-section .img-wrapper .bakcground-img {
+    width: 100vw;
+    height: 100vw;
+  }
+  .content-section .content-wrapper {
+    width: calc(100% - 20px);
+  }
+}
