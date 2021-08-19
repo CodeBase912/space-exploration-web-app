@@ -5,6 +5,8 @@ import { createAsteroidBelt } from "./components/Asteriods.js";
 import { createStars } from "./components/Stars.js";
 import { moveCameraForward, moveCameraBackward } from "./Util/cameraMovements.js";
 import { updateInfo } from "./Util/Utils.js";
+import { renderPlanet } from "./planet.js/app.js";
+import "./planet.js/app.js";
 
 const prevBtn = document.querySelector("#prev-btn");
 const nextBtn = document.querySelector("#next-btn");
@@ -367,6 +369,8 @@ function openPlanetInfoTab() {
     planetInfoTab.style.transition = "0.5s ease-in-out";
     planetInfoTab.style.top = "0";
     planetInfoTab.style.height = "100%";
+    
+    renderPlanet();
 }
 
 function closePlanetInfoTab() {
