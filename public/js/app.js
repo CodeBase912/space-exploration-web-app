@@ -28,7 +28,7 @@ renderer.setPixelRatio(window.devicePixelRatio);
  * The sun
 */
 
-const sunObj = new Planet(8, 0, 0, 0, 'Sun', '../three.js/img/sun.jpg', '', 0, 0);
+const sunObj = new Planet(8, 0, 0, 0, 'Sun', '../img/sun.jpg', '', 0, 0);
 const Sun = sunObj.createPlanet();
 // console.log(sun);
 sunObj.addOrbits();
@@ -40,7 +40,7 @@ const sun = sunObj.planet;
  * Mercury
 */
 
-const mercuryObj = new Planet(0.3, 0, 0, 0, 'Mercury', '../three.js/img/mercury.jpg', '', -13, 0);
+const mercuryObj = new Planet(0.3, 0, 0, 0, 'Mercury', '../img/mercury.jpg', '', -13, 0);
 const Mercury = mercuryObj.createPlanet();
 // console.log(mercury);
 mercuryObj.addOrbits();
@@ -52,7 +52,7 @@ const mercury = mercuryObj.planet;
  * Venus
 */
 
-const venusObj = new Planet(0.4, 0, 0, 0, 'Venus', '../three.js/img/venus.jpg', '', -25, 30);
+const venusObj = new Planet(0.4, 0, 0, 0, 'Venus', '../img/venus.jpg', '', -25, 30);
 const Venus = venusObj.createPlanet();
 // console.log(venus);
 venusObj.addOrbits();
@@ -64,7 +64,7 @@ const venus = venusObj.planet;
  * Earth
 */
 
-const earthObj = new Planet(0.5, 0, 0, 0, 'Earth', '../three.js/img/globe.jpg', '', -35, 60);
+const earthObj = new Planet(0.5, 0, 0, 0, 'Earth', '../img/globe.jpg', '', -35, 60);
 const Earth = earthObj.createPlanet();
 // console.log(Earth);
 earthObj.addOrbits();
@@ -76,7 +76,7 @@ const earth = earthObj.planet;
  * Mars
 */
 
-const marsObj = new Planet(0.4, 0, 0, 0, 'Mars', '../three.js/img/mars.jpg', '', -50, 20);
+const marsObj = new Planet(0.4, 0, 0, 0, 'Mars', '../img/mars.jpg', '', -50, 20);
 const Mars = marsObj.createPlanet();
 // console.log(mars);
 marsObj.addOrbits();
@@ -90,7 +90,7 @@ const mars = marsObj.planet;
 */
 
 
-const jupiterObj = new Planet(4, 0, 0, 0, 'Jupiter', '../three.js/img/jupiter.jpg', '', -110, -30);
+const jupiterObj = new Planet(4, 0, 0, 0, 'Jupiter', '../img/jupiter.jpg', '', -110, -30);
 const Jupiter = jupiterObj.createPlanet();
 // console.log(jupiter);
 jupiterObj.addOrbits();
@@ -104,7 +104,7 @@ const jupiter = jupiterObj.planet;
 */
 
 
-const saturnObj = new Planet(3, 4, 7, 80.3, 'Saturn', '../three.js/img/saturn.jpg', './img/saturn-rings.jpg', -160, 50);
+const saturnObj = new Planet(3, 4, 7, 80.3, 'Saturn', '../img/saturn.jpg', '../img/saturn-rings.jpg', -160, 50);
 const Saturn = saturnObj.createPlanet();
 saturnObj.addRings();
 saturnObj.addOrbits();
@@ -117,7 +117,7 @@ const saturn = saturnObj.planet;
 */
 
 
-const uranusObj = new Planet(3, 4, 7, 80.3, 'Uranus', '../three.js/img/uranus.jpg', './img/uranus-rings.jpg', -230, 80);
+const uranusObj = new Planet(3, 4, 7, 80.3, 'Uranus', '../img/uranus.jpg', '../img/uranus-rings.jpg', -230, 80);
 const Uranus = uranusObj.createPlanet();
 uranusObj.addRings();
 uranusObj.addOrbits();
@@ -129,7 +129,7 @@ const uranus = uranusObj.planet;
  * Neptune
 */
 
-const neptuneObj = new Planet(4, 0, 0, 0, 'Neptune', '../three.js/img/neptune.jpg', '', -300, 40);
+const neptuneObj = new Planet(4, 0, 0, 0, 'Neptune', '../img/neptune.jpg', '', -300, 40);
 const Neptune = neptuneObj.createPlanet();
 neptuneObj.addOrbits();
 const neptuneLocation = neptuneObj.setPlanetOrbitPosition();

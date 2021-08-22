@@ -9,7 +9,6 @@ import "../tween.umd.js";
 
 export function renderPlanet() {
     const canvasWrapper = document.querySelector(".canvas-wrapper");
-    console.log(canvasWrapper.getBoundingClientRect());
     const width = canvasWrapper.getBoundingClientRect().width;
     const height = canvasWrapper.getBoundingClientRect().height;
     const canvas = document.querySelector("#weglPlanet");
@@ -27,15 +26,15 @@ export function renderPlanet() {
 
     // Place the planets' info in a variable
     const planetGeneratorInfo = {
-        sun: [4, 0, 0, 0, 'Sun', '../three.js/img/sun.jpg', '', 0, 0],
-        mercury: [4, 0, 0, 0, 'Mercury', '../three.js/img/mercury.jpg', '', 0, 0],
-        venus: [4, 0, 0, 0, 'Venus', '../three.js/img/venus.jpg', '', 0, 30],
-        earth: [4, 0, 0, 0, 'Earth', '../three.js/img/globe.jpg', '', 0, 60],
-        mars: [4, 0, 0, 0, 'Mars', '../three.js/img/mars.jpg', '', 0, 20],
-        jupiter: [4, 0, 0, 0, 'Jupiter', '../three.js/img/jupiter.jpg', '', 0, -30],
-        saturn: [4, 4, 7, 80.3, 'Saturn', '../three.js/img/saturn.jpg', './img/saturn-rings.jpg', 0, 50],
-        uranus: [4, 4, 7, 80.3, 'Uranus', '../three.js/img/uranus.jpg', './img/uranus-rings.jpg', 0, 80],
-        neptune: [4, 0, 0, 0, 'Neptune', '../three.js/img/neptune.jpg', '', 0, 40]
+        sun: [4, 0, 0, 0, 'Sun', '../img/sun.jpg', '', 0, 0],
+        mercury: [4, 0, 0, 0, 'Mercury', '../img/mercury.jpg', '', 0, 0],
+        venus: [4, 0, 0, 0, 'Venus', '../img/venus.jpg', '', 0, 30],
+        earth: [4, 0, 0, 0, 'Earth', '../img/globe.jpg', '', 0, 60],
+        mars: [4, 0, 0, 0, 'Mars', '../img/mars.jpg', '', 0, 20],
+        jupiter: [4, 0, 0, 0, 'Jupiter', '../img/jupiter.jpg', '', 0, -30],
+        saturn: [4, 4, 7, 80.3, 'Saturn', '../img/saturn.jpg', '../img/saturn-rings.jpg', 0, 50],
+        uranus: [4, 4, 7, 80.3, 'Uranus', '../img/uranus.jpg', '../img/uranus-rings.jpg', 0, 80],
+        neptune: [4, 0, 0, 0, 'Neptune', '../img/neptune.jpg', '', 0, 40]
     };
 
 
@@ -94,7 +93,6 @@ export function renderPlanet() {
     controls.target.set(0, 0, 0);
     controls.enableZoom = false;
     controls.enablePan = false;
-    console.log(controls);
 
 
     function animate() {
