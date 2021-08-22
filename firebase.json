@@ -4,7 +4,9 @@
     "public": "public",
     "ignore": [
       "firebase.json",
-      "**/.*"
+      "**/.*",
+      "**/tween.js/**",
+      "**/node_modules/**"
     ],
     "rewrites": [
       {
