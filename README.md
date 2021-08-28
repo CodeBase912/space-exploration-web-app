@@ -2,7 +2,7 @@
 
 [Live site](https://solar-exploration.web.app/)
 
-A personal project I built with vinilla javascript. I used the three.js javascript library to build an interactive 3D render of our solar system. This is a single page web app designed to provide information about the beautiful planets of our solar system. Planetary data is sourced - via AJAX - from the [Solar Systen OpenData](https://api.le-systeme-solaire.net/en/) API.
+A personal project I built with vanilla javascript. I used the three.js javascript library to build an interactive 3D render of our solar system. This is a single page web app designed to provide information about the beautiful planets of our solar system. Planetary data is sourced - via AJAX - from the [Solar Systen OpenData](https://api.le-systeme-solaire.net/en/) API.
 
 **Note: The work on this project is still in progress!**
 
