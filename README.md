@@ -8,7 +8,7 @@ A personal project I built with vanilla javascript. I used the three.js javascri
 
 ## Screenshot
 
-![screenshot](./public/img/screenshot.png?raw=true 'Title')
+![screenshot](./public/img/screenshot.png?raw=true 'Screenshot of Solar')
 
 ## Features
 
