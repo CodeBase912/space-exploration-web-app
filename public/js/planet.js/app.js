@@ -8,6 +8,8 @@ import {
   moveCameraBackward,
 } from '../Util/cameraMovements.js';
 import { updateInfo } from '../Util/Utils.js';
+import { formatNumber } from '../Util/Utils.js';
+import { getUserData } from '../app.js';
 import '../tween.umd.js';
 
 export function renderPlanet() {
@@ -121,8 +123,131 @@ export function renderPlanet() {
   animate();
 
   /**
-   * Set the planetInfoTab Title
+   * Set the planetInfoTab Data
    */
+
+  const user = getUserData();
+  const planetGravity = document.querySelector('#planet-gravity');
+  const planetYear = document.querySelector('#planet-year');
+
+  console.log(planetGravity);
+
+  if (user.age && (!user.weight || user.weight == '')) {
+    // Only the user's age is given
+    if (planetName.innerHTML == 'Sun') {
+      document.querySelectorAll('.user-wrapper')[0].style.opacity = 0;
+      document.querySelectorAll('.user-wrapper')[0].style.pointerEvents =
+        'none';
+      document.querySelectorAll('.user-wrapper')[1].style.opacity = 0;
+      document.querySelectorAll('.user-wrapper')[1].style.pointerEvents =
+        'none';
+    } else {
+      // Define the user's age on the planet
+      const userAge = formatNumber(
+        (user.age * 365) / parseFloat(planetYear.innerHTML)
+      );
+      // Hide the HTML DOM element that displays user's weight
+      document.querySelectorAll('.user-wrapper')[1].style.opacity = 0;
+      document.querySelectorAll('.user-wrapper')[1].style.pointerEvents =
+        'none';
+      // Update the HTML DOM element that displays user's age
+      document.querySelectorAll('.user-wrapper')[0].style.opacity = 1;
+      document.querySelectorAll('.user-wrapper')[0].style.pointerEvents = 'all';
+      document.querySelectorAll('.user-age-on-planet')[0].innerHTML =
+        planetName.innerHTML;
+      // If the planet is Earth display the user's input data
+      if (planetName.innerHTML == 'Earth') {
+        document.querySelectorAll('#user-age')[0].innerHTML = user.age;
+      } else {
+        // Otherwise enter the calculated data
+        document.querySelectorAll('#user-age')[0].innerHTML = userAge;
+      }
+    }
+  } else if (user.weight && (!user.age || user.age == '')) {
+    // Only the user's weight is given
+    if (planetName.innerHTML == 'Sun') {
+      document.querySelectorAll('.user-wrapper')[0].style.opacity = 0;
+      document.querySelectorAll('.user-wrapper')[0].style.pointerEvents =
+        'none';
+      document.querySelectorAll('.user-wrapper')[1].style.opacity = 0;
+      document.querySelectorAll('.user-wrapper')[1].style.pointerEvents =
+        'none';
+    } else {
+      // Define the user's weight on the planet
+      const userWeight = formatNumber(
+        (user.weight / 9.8) * parseFloat(planetGravity.innerHTML)
+      );
+      // Hide the HTML DOM element that displays user's age
+      document.querySelectorAll('.user-wrapper')[0].style.opacity = 0;
+      document.querySelectorAll('.user-wrapper')[0].style.pointerEvents =
+        'none';
+      // Update the HTML DOM element that displays user's weight
+      document.querySelectorAll('.user-wrapper')[1].style.opacity = 1;
+      document.querySelectorAll('.user-wrapper')[1].style.pointerEvents = 'all';
+      document.querySelectorAll('.user-age-on-planet')[1].innerHTML =
+        planetName.innerHTML;
+      // If the planet is Earth display the user's input data
+      if (planetName.innerHTML == 'Earth') {
+        document.querySelectorAll('#user-age')[1].innerHTML = user.weight;
+      } else {
+        // Otherwise enter the calculated data
+        document.querySelectorAll('#user-age')[1].innerHTML = userWeight;
+      }
+    }
+  } else if (user.age && user.weight) {
+    // Both the user's age and weight are given
+    if (planetName.innerHTML == 'Sun') {
+      document.querySelectorAll('.user-wrapper')[0].style.opacity = 0;
+      document.querySelectorAll('.user-wrapper')[0].style.pointerEvents =
+        'none';
+      document.querySelectorAll('.user-wrapper')[1].style.opacity = 0;
+      document.querySelectorAll('.user-wrapper')[1].style.pointerEvents =
+        'none';
+    } else {
+      // Define the user's age on the planet
+      const userAge = formatNumber(
+        (user.age * 365) / parseFloat(planetYear.innerHTML)
+      );
+      // Define the user's weight on the planet
+      const userWeight = formatNumber(
+        (user.weight / 9.8) * parseFloat(planetGravity.innerHTML)
+      );
+      // Update the HTML DOM element that displays user's age
+      document.querySelectorAll('.user-wrapper')[0].style.opacity = 1;
+      document.querySelectorAll('.user-wrapper')[0].style.pointerEvents = 'all';
+      document.querySelectorAll('.user-age-on-planet')[0].innerHTML =
+        planetName.innerHTML;
+      // If the planet is Earth display the user's input data
+      if (planetName.innerHTML == 'Earth') {
+        document.querySelectorAll('#user-age')[0].innerHTML = user.age;
+      } else {
+        // Otherwise enter the calculated data
+        document.querySelectorAll('#user-age')[1].innerHTML = userAge;
+      }
+      document.querySelectorAll('#user-age')[0].innerHTML = userAge;
+      // Update the HTML DOM element that displays user's weight
+      document.querySelectorAll('.user-wrapper')[1].style.opacity = 1;
+      document.querySelectorAll('.user-wrapper')[1].style.pointerEvents = 'all';
+      document.querySelectorAll('.user-age-on-planet')[1].innerHTML =
+        planetName.innerHTML;
+      // If the planet is Earth display the user's input data
+      if (planetName.innerHTML == 'Earth') {
+        document.querySelectorAll('#user-age')[1].innerHTML = user.weight;
+      } else {
+        // Otherwise enter the calculated data
+        document.querySelectorAll('#user-age')[1].innerHTML = userWeight;
+      }
+      document.querySelectorAll('#user-age')[1].innerHTML = userWeight;
+    }
+  } else {
+    // Both the user's age and weight are not given
+    // Hide the HTML DOM element that displays user's age
+    document.querySelectorAll('.user-wrapper')[0].style.opacity = 0;
+    document.querySelectorAll('.user-wrapper')[0].style.pointerEvents = 'none';
+    // Hide the HTML DOM element that displays user's weight
+    document.querySelectorAll('.user-wrapper')[1].style.opacity = 0;
+    document.querySelectorAll('.user-wrapper')[1].style.pointerEvents = 'none';
+  }
 
   const planetInfoTabTitle = document
     .querySelector('.content-wrapper')

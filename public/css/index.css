@@ -92,6 +92,38 @@ main {
   display: none;
 }
 
+.btn {
+  padding: 5px 20px;
+  background: #2c34a1;
+  color: white;
+  border: 2px solid #2c34a1;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn:active {
+  background: transparent;
+  /* color: #2c34a1; */
+  border: 2px solid #2c34a1;
+}
+
+.btn-2 {
+  padding: 5px 26px;
+  background: transparent;
+  color: #474d9e;
+  border: 2px solid #474d9e;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn-2:active {
+  background: transparent;
+  /* color: #2c34a1; */
+  border: 2px solid #2c34a1;
+}
+
 .user-input-footer {
   padding-top: 20px;
 }
@@ -122,6 +154,8 @@ main {
   text-align: center;
   pointer-events: none;
   opacity: 0;
+  max-height: calc(100vh - 230px);
+  overflow-y: hidden;
 }
 
 #info-tab #icon-wrapper {
@@ -149,6 +183,7 @@ main {
 #info-tab #details {
   color: rgb(173, 173, 173);
   padding: 10px 0 0 0;
+  overflow-y: scroll;
 }
 
 #info-tab #details p {
@@ -161,8 +196,13 @@ main {
   color: #717171;
 }
 
-#info-tab #details .btn-wrapper {
-  padding: 20px 0 20px 0;
+#info-tab .btn-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: black;
+  width: 100%;
+  padding: 20px 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -394,6 +434,7 @@ main {
 .planet-section .planet-content .user-data-wrapper .user-wrapper .user-age,
 .planet-section .planet-content .user-data-wrapper .user-wrapper .user-weight {
   color: #4a53d1;
+  font-size: 16px;
 }
 
 .planet-section .planet-content .canvas-wrapper {

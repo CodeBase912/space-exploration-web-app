@@ -24,41 +24,41 @@
       </div>
     </header>
 
+    <div id="user-input-tab">
+      <h2>Enter your age & weight</h2>
+      <p class="user-input-info">Please enter a number for each field</p>
+
+      <div class="user-input-error-wrapper">
+        <p class="user-input-error" id="error-msg"></p>
+      </div>
+      <div class="user-input-input-wrapper">
+        <input
+          type="text"
+          name="age"
+          placeholder="Age (years)"
+          class="user-input-input"
+          id="age-input"
+        />
+        <input
+          type="text"
+          name="weight"
+          placeholder="Weight (kg)"
+          class="user-input-input"
+          id="weight-input"
+        />
+      </div>
+      <button class="btn" id="user-input-submit">Submit</button>
+      <button class="btn-2" id="user-input-skip">Skip</button>
+      <div class="user-input-footer">
+        <p class="user-input-footer-info">
+          Why? You probably want to know how old you would be and how much you'd
+          weigh on Jupiter
+        </p>
+      </div>
+    </div>
+
     <main>
       <canvas class="webgl"></canvas>
-
-      <div id="user-input-tab">
-        <h2>Enter your age & weight</h2>
-        <p class="user-input-info">Please enter a number for each field</p>
-
-        <div class="user-input-error-wrapper">
-          <p class="user-input-error" id="error-msg">Please enter a number</p>
-        </div>
-        <div class="user-input-input-wrapper">
-          <input
-            type="text"
-            name="age"
-            placeholder="Age (years)"
-            class="user-input-input"
-            id="age-input"
-          />
-          <input
-            type="text"
-            name="weight"
-            placeholder="Weight (kg)"
-            class="user-input-input"
-            id="weight-input"
-          />
-        </div>
-        <button id="btn">Submit</button>
-        <button id="btn-2">Skip</button>
-        <div class="user-input-footer">
-          <p class="user-input-footer-info">
-            Why? You probably want to know how old you would be and how much
-            you'd weigh on Jupiter
-          </p>
-        </div>
-      </div>
 
       <div class="Info-btn" id="btn">Info</div>
 
@@ -81,9 +81,10 @@
           <p id="discovered-by">
             <span>Discovered by:</span> William Herschel (13/03/1781)
           </p>
-          <div class="btn-wrapper">
-            <div class="more-info-btn" id="btn">More Info</div>
-          </div>
+        </div>
+
+        <div class="btn-wrapper">
+          <div class="more-info-btn" id="btn">More Info</div>
         </div>
       </div>
 
@@ -150,13 +151,13 @@
               <div class="user-data-wrapper">
                 <div class="user-wrapper">
                   <h3 class="user-age-title">
-                    Your age on <span id="user-age-on-planet"></span>
+                    Your age on <span class="user-age-on-planet"></span>
                   </h3>
                   <p class="user-age"><span id="user-age"></span> years old</p>
                 </div>
                 <div class="user-wrapper">
                   <h3 class="user-weight-title">
-                    Your weight on <span id="user-age-on-planet"></span>
+                    Your weight on <span class="user-age-on-planet"></span>
                   </h3>
                   <p class="user-weight"><span id="user-age"></span> kg</p>
                 </div>

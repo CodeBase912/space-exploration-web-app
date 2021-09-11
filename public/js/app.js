@@ -12,9 +12,13 @@ import { renderPlanet } from './planet.js/app.js';
 import './planet.js/app.js';
 
 // Handle the user input
+const main = document.getElementsByTagName('main')[0];
+const userInputContainer = document.querySelector('#user-input-tab');
 const ageInput = document.querySelector('#age-input');
 const weightInput = document.querySelector('#weight-input');
 const inputErrorMessage = document.querySelector('#error-msg');
+const userInputSubmitBtn = document.querySelector('#user-input-submit');
+const userInputSkipBtn = document.querySelector('#user-input-skip');
 
 /**
  * @function handleChange - handles the triggered input event
@@ -31,13 +35,18 @@ const inputErrorMessage = document.querySelector('#error-msg');
  *
  * @param {object} errorMessage - the HTML DOM element that displays the error
  *                                message
- *
  */
-function handleInputEvent(event, elementInFocus, otherElement, errorMessage) {
+export function handleInputEvent(
+  event,
+  elementInFocus,
+  otherElement,
+  errorMessage
+) {
   // Check if the user input is a number
   if (isNaN(event.target.value)) {
     // User input is not a number. Display error message
     elementInFocus.classList.add('error');
+    errorMessage.innerHTML = 'Please enter a number';
     errorMessage.style.display = 'block';
   } else {
     // User input is a number. Remove error class from alement in focus
@@ -53,12 +62,77 @@ function handleInputEvent(event, elementInFocus, otherElement, errorMessage) {
   }
 }
 
+/**
+ * @function saveUserInput - saves the user input into local storage
+ *
+ * @param {number} age - the age of the user
+ * @param {number} weight - the weight of the user
+ */
+export function saveUserInput(age, weight) {
+  // Check if either the age of weight is given
+  if (age || weight) {
+    // Check if the age and weight are numbers
+    if (
+      (age && !isNaN(age) && weight && !isNaN(weight)) || // If both age & weight are given & are both numbers
+      (age && !isNaN(age) && !isNaN(weight)) || // If age is given & is a number & weight is not given
+      (weight && !isNaN(weight) && !isNaN(age)) // If weight is given & is a number  & weight is not given
+    ) {
+      // Either age or weight or both are given. Save the data
+
+      main.style.pointerEvents = 'all';
+      if (age != '') {
+        localStorage.setItem('age', age);
+      }
+      if (weight != '') {
+        localStorage.setItem('weight', weight);
+      }
+      userInputContainer.style.display = 'none';
+      inputErrorMessage.style.display = 'none';
+    } else {
+      // Either age or weight or both are defined but one or both is not a
+      // number. Display error message
+      inputErrorMessage.innerHTML = 'Please enter a number';
+      inputErrorMessage.style.display = 'block';
+    }
+  } else {
+    // No data was given. Display an error message
+    inputErrorMessage.innerHTML =
+      'You need to provide at least your age or weight';
+    inputErrorMessage.style.display = 'block';
+  }
+}
+
+/**
+ * @function getUserData - gets the user's age and weight data from local
+ *                         storage
+ *
+ * @return {object} - an object that contains the user's age and weight
+ */
+export function getUserData() {
+  const age = localStorage.getItem('age');
+  const weight = localStorage.getItem('weight');
+  return { age, weight };
+}
+
+// Initially we the user should not be able to interact with the main
+// app
+main.style.pointerEvents = 'none';
+
 ageInput.addEventListener('input', (event) =>
   handleInputEvent(event, ageInput, weightInput, inputErrorMessage)
 );
 weightInput.addEventListener('input', (event) =>
   handleInputEvent(event, weightInput, ageInput, inputErrorMessage)
 );
+
+userInputSubmitBtn.addEventListener('click', () =>
+  saveUserInput(ageInput.value, weightInput.value)
+);
+userInputSkipBtn.addEventListener('click', () => {
+  inputErrorMessage.style.display = 'none';
+  userInputContainer.style.display = 'none';
+  main.style.pointerEvents = 'all';
+});
 
 const prevBtn = document.querySelector('#prev-btn');
 const nextBtn = document.querySelector('#next-btn');
@@ -442,7 +516,9 @@ xhr.onload = function () {
       gravity.innerHTML = '';
     } else {
       gravity.innerHTML =
-        '<span>Gravity:</span> <br>' + theSun.gravity + ' m.s<sup>-2</sup>';
+        '<span>Gravity:</span> <br> <span id="planet-gravity">' +
+        theSun.gravity +
+        '</span> m.s<sup>-2</sup>';
     }
     orbitalPeriod.innerHTML = '';
     if (theSun.discoveredBy == '') {
