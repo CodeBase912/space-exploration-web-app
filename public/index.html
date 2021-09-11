@@ -1,113 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/index.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" href="./img/logo.png" />
+    <link rel="apple-touch-icon" href="./img/logo.png" />
+    <link rel="stylesheet" href="./css/index.css" />
     <!-- Links to the Quicksand Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap"
+      rel="stylesheet"
+    />
     <title>Solar Exploration</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <div class="logo-wrapper">
-            <p>Solar</p>
-        </div>
+      <div class="logo-wrapper">
+        <p>Solar</p>
+      </div>
     </header>
 
     <main>
-        <canvas class="webgl"></canvas>
+      <canvas class="webgl"></canvas>
 
-        <div class="Info-btn" id="btn">Info</div>
+      <div id="user-input-tab">
+        <h2>Enter your age & weight</h2>
+        <p class="user-input-info">Please enter a number for each field</p>
 
-        <div id="info-tab">
-            <div id="icon-wrapper">
-                <img src="./img/icons/Close_icon.svg" alt="Close icon" class="close-item-icon" id="close-icon-1">
+        <div class="user-input-error-wrapper">
+          <p class="user-input-error" id="error-msg">Please enter a number</p>
+        </div>
+        <div class="user-input-input-wrapper">
+          <input
+            type="text"
+            name="age"
+            placeholder="Age (years)"
+            class="user-input-input"
+            id="age-input"
+          />
+          <input
+            type="text"
+            name="weight"
+            placeholder="Weight (kg)"
+            class="user-input-input"
+            id="weight-input"
+          />
+        </div>
+        <button id="btn">Submit</button>
+        <button id="btn-2">Skip</button>
+        <div class="user-input-footer">
+          <p class="user-input-footer-info">
+            Why? You probably want to know how old you would be and how much
+            you'd weigh on Jupiter
+          </p>
+        </div>
+      </div>
+
+      <div class="Info-btn" id="btn">Info</div>
+
+      <div id="info-tab">
+        <div id="icon-wrapper">
+          <img
+            src="./img/icons/Close_icon.svg"
+            alt="Close icon"
+            class="close-item-icon"
+            id="close-icon-1"
+          />
+        </div>
+        <div id="planet-name">The Sun</div>
+        <div id="moons">No moons</div>
+        <div id="details">
+          <p id="diameter"><span>Diameter:</span> 2 410.3 km</p>
+          <p id="mass"><span>Mass:</span> 7.34 x 10<sup>22</sup> kg</p>
+          <p id="gravity"><span>Gravity:</span> 54 m.s<sup>-2</sup></p>
+          <p id="orbital-period"><span>Year:</span> 30685.4 earth days</p>
+          <p id="discovered-by">
+            <span>Discovered by:</span> William Herschel (13/03/1781)
+          </p>
+          <div class="btn-wrapper">
+            <div class="more-info-btn" id="btn">More Info</div>
+          </div>
+        </div>
+      </div>
+
+      <nav id="planet-nav">
+        <img
+          src="./img/icons/left.svg"
+          alt=""
+          class="control-btn"
+          id="prev-btn"
+        />
+        <p class="planet-name">The Sun</p>
+        <img
+          src="./img/icons/right.svg"
+          alt=""
+          class="control-btn"
+          id="next-btn"
+        />
+      </nav>
+
+      <div class="planet-info-container">
+        <section class="header">
+          <section class="logo-wrapper">
+            <p>Solar</p>
+          </section>
+          <section class="icon-wrapper">
+            <img
+              src="./img/icons/Close_icon.svg"
+              alt="Close window icon"
+              class="close-item-icon"
+              id="close-icon-2"
+            />
+          </section>
+        </section>
+
+        <section class="main">
+          <section class="content-section">
+            <div class="img-wrapper">
+              <img
+                src="./img/img_mars.svg"
+                alt="Close Up Image of Mars"
+                class="bakcground-img"
+              />
             </div>
-            <div id="planet-name">The Sun</div>
-            <div id="moons">No moons</div>
-            <div id="details">
-                <p id="diameter"><span>Diameter:</span> 2 410.3 km</p>
-                <p id="mass"><span>Mass:</span> 7.34 x 10<sup>22</sup> kg</p>
-                <p id="gravity"><span>Gravity:</span> 54 m.s<sup>-2</sup></p>
-                <p id="orbital-period"><span>Year:</span> 30685.4 earth days</p>
-                <p id="discovered-by"><span>Discovered by:</span> William Herschel (13/03/1781)</p>
-                <div class="btn-wrapper">
-                    <div class="more-info-btn" id="btn">More Info</div>
+
+            <div class="content-wrapper">
+              <h1>Mars</h1>
+              <p>
+                Mars is the third planet from the Sun and is the second smallest
+                planet in the solar system after Mercury.
+              </p>
+
+              <p>
+                Mars is a terrestrial planet with a thin atmosphere, having
+                surface features reminiscent of the impact crators of the Moon
+                and the valeys, desserts and polar ice caps of Earth.
+              </p>
+            </div>
+          </section>
+
+          <section class="planet-section">
+            <div class="left-section divider"></div>
+            <div class="right-section divider"></div>
+            <div class="planet-content">
+              <div class="user-data-wrapper">
+                <div class="user-wrapper">
+                  <h3 class="user-age-title">
+                    Your age on <span id="user-age-on-planet"></span>
+                  </h3>
+                  <p class="user-age"><span id="user-age"></span> years old</p>
                 </div>
-            </div>
-        </div>
-    
-        <nav id="planet-nav">
-            <img src="./img/icons/left.svg" alt="" class="control-btn" id="prev-btn">
-            <p class="planet-name">The Sun</p>
-            <img src="./img/icons/right.svg" alt="" class="control-btn" id="next-btn">
-        </nav>
+                <div class="user-wrapper">
+                  <h3 class="user-weight-title">
+                    Your weight on <span id="user-age-on-planet"></span>
+                  </h3>
+                  <p class="user-weight"><span id="user-age"></span> kg</p>
+                </div>
+              </div>
 
-        <div class="planet-info-container">
-            <section class="header">
-                <section class="logo-wrapper">
-                    <p>Solar</p>
-                </section>
-                <section class="icon-wrapper">
-                    <img src="./img/icons/Close_icon.svg" alt="Close window icon" class="close-item-icon" id="close-icon-2">
-                </section>
-            </section>
-        
-            <section class="main">
-                <section class="content-section">
-                    <div class="img-wrapper">
-                        <img src="./img/img_mars.svg" alt="Close Up Image of Mars" class="bakcground-img">
-                    </div>
-        
-                    <div class="content-wrapper">
-                        <h1>Mars</h1>
-                        <p>Mars is the third planet from the Sun and is the second smallest planet in the solar system after
-                            Mercury.</p>
-        
-                        <p>Mars is a terrestrial planet with a thin atmosphere, having surface features reminiscent of the
-                            impact
-                            crators of the Moon and the valeys, desserts and polar ice caps of Earth.</p>
-                    </div>
-                </section>
-        
-                <section class="planet-section">
-                    <div class="left-section divider"></div>
-                    <div class="right-section divider"></div>
-                    <div class="planet-content">
-                        <div class="user-data-wrapper">
-                            <div class="user-wrapper">
-                                <h3 class="user-age-title">Your age on <span id="user-age-on-planet"></span></h3>
-                                <p class="user-age"><span id="user-age"></span> years old</p>
-                            </div>
-                            <div class="user-wrapper">
-                                <h3 class="user-weight-title">Your weight on <span id="user-age-on-planet"></span></h3>
-                                <p class="user-weight"><span id="user-age"></span> kg</p>
-                            </div>
-                        </div>
-        
-                        <div class="canvas-wrapper">
-                            <canvas id="weglPlanet"></canvas>
-                        </div>
-        
-                        <div class="user-data-wrapper">
-                            <div class="user-wrapper">
-                                <h3 class="user-age-title">Atmosphere</h3>
-                                <p><span id="atmosphere">96% carbo dioxide, 1.93% argon and 1.89% nitrogen</span></p>
-                            </div>
-                            <div class="user-wrapper">
-                                <h3 class="user-weight-title">Climate</h3>
-                                <p><span id="climate">Temperatures vary from -178<sup>o</sup> C to
-                                        24<sup>o</sup> C in equatorial summer</span></p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </section>
-        </div>
+              <div class="canvas-wrapper">
+                <canvas id="weglPlanet"></canvas>
+              </div>
+
+              <div class="user-data-wrapper">
+                <div class="user-wrapper">
+                  <h3 class="user-age-title">Atmosphere</h3>
+                  <p>
+                    <span id="atmosphere"
+                      >96% carbo dioxide, 1.93% argon and 1.89% nitrogen</span
+                    >
+                  </p>
+                </div>
+                <div class="user-wrapper">
+                  <h3 class="user-weight-title">Climate</h3>
+                  <p>
+                    <span id="climate"
+                      >Temperatures vary from -178<sup>o</sup> C to 24<sup
+                        >o</sup
+                      >
+                      C in equatorial summer</span
+                    >
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
     </main>
 
     <!-- <script src="js/three.js"></script> -->
@@ -116,12 +199,12 @@
     <script type="module" src="./js/app.js"></script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="/__/firebase/8.10.0/firebase-app.js"></script>
-    
+
     <!-- TODO: Add SDKs for Firebase products that you want to use
          https://firebase.google.com/docs/web/setup#available-libraries -->
     <script src="/__/firebase/8.10.0/firebase-analytics.js"></script>
-    
+
     <!-- Initialize Firebase -->
     <script src="/__/firebase/init.js"></script>
-</body>
+  </body>
 </html>
