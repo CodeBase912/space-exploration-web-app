@@ -217,7 +217,7 @@ const earthObj = new Planet(
   0,
   0,
   'Earth',
-  '../img/globe.jpg',
+  '../img/globe.png',
   '',
   -35,
   60
@@ -362,6 +362,13 @@ scene.add(pointLight);
  * Add Orbital Controls
  */
 let controls = new OrbitControls(camera, renderer.domElement);
+controls.enableZoom = true;
+controls.enablePan = true;
+controls.enableRotate = true;
+controls.enableDamping = true;
+controls.zoomSpeed = 0.6;
+controls.panSpeed = 0.5;
+controls.rotateSpeed = 0.4;
 
 /**
  * Add Background Stars
@@ -460,7 +467,8 @@ prevBtn.addEventListener('click', () => {
 function animate() {
   requestAnimationFrame(animate);
   // cube.rotation.x += 0.01;
-  earth.children[0].rotation.y += 0.007;
+  earth.children[0].rotation.y += 0.003;
+  earth.children[1].rotation.y += 0.0045;
   mars.children[0].rotation.y += 0.01;
   jupiter.children[0].rotation.y += 0.001;
   innerAsteroidBelt.rotation.y += 0.0005;
@@ -505,18 +513,20 @@ xhr.onload = function () {
     }
 
     diameter.innerHTML =
-      '<span>Diameter:</span> <br>' + theSun.meanRadius * 2 + ' km';
+      '<span id="property-name">Diameter:</span> <br>' +
+      theSun.meanRadius * 2 +
+      ' km';
     mass.innerHTML =
-      '<span>Mass:</span> <br>' +
+      '<span id="property-name">Mass:</span> <br>' +
       theSun.mass.massValue +
       ' x 10<sup>' +
       theSun.mass.massExponent +
-      '</sup>';
+      '</sup> kg';
     if (theSun.gravity == 0) {
       gravity.innerHTML = '';
     } else {
       gravity.innerHTML =
-        '<span>Gravity:</span> <br> <span id="planet-gravity">' +
+        '<span id="property-name">Gravity:</span> <br> <span id="planet-gravity">' +
         theSun.gravity +
         '</span> m.s<sup>-2</sup>';
     }
@@ -525,7 +535,7 @@ xhr.onload = function () {
       discoveredBy.innerHTML = '';
     } else {
       discoveredBy =
-        '<span>Siscovered by:</span> <br>' +
+        '<span id="property-name">Discovered by:</span> <br>' +
         theSun.discoveredBy +
         ' (' +
         theSun.discoveryDate +
@@ -569,7 +579,7 @@ function openPlanetInfoTab() {
   const planetInfoTab = document.querySelector('.planet-info-container');
 
   planetInfoTab.style.transition = '0.5s ease-in-out';
-  planetInfoTab.style.top = '0';
+  planetInfoTab.style.top = '1px';
   planetInfoTab.style.height = '100%';
 
   renderPlanet();

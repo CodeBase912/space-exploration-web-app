@@ -154,6 +154,7 @@ main {
   text-align: center;
   pointer-events: none;
   opacity: 0;
+  height: min-content;
   max-height: calc(100vh - 230px);
   overflow-y: hidden;
 }
@@ -178,12 +179,40 @@ main {
 
 #info-tab #moons {
   color: #717171;
+  padding-bottom: 10px;
 }
 
 #info-tab #details {
+  position: relative;
   color: rgb(173, 173, 173);
-  padding: 10px 0 0 0;
+  height: min-content;
+  max-height: calc(100vh - 230px - 100px);
   overflow-y: scroll;
+}
+
+/* width */
+#info-tab #details::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+#info-tab #details::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+#info-tab #details::-webkit-scrollbar-thumb {
+  background: rgb(31, 31, 31);
+  border-radius: 20px;
+}
+
+/* Handle on hover */
+#info-tab #details::-webkit-scrollbar-thumb:hover {
+  background: rgb(53, 53, 53);
+}
+
+#info-tab #details p:first-child {
+  padding: 0;
 }
 
 #info-tab #details p {
@@ -191,18 +220,14 @@ main {
   color: #6b71cc;
 }
 
-#info-tab #details p span {
+#info-tab #details p #property-name {
   font-weight: bold;
   color: #717171;
 }
 
 #info-tab .btn-wrapper {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background: black;
   width: 100%;
-  padding: 20px 0;
+  padding: 20px 0 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -246,15 +271,16 @@ main {
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;
+  max-width: 40vw;
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: 5px 10px;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.637),
-    rgba(0, 0, 0, 0.637)
+    rgba(95, 95, 95, 0.247),
+    rgba(95, 95, 95, 0.247)
   );
   margin: 0 auto 10px auto;
   border-radius: 20px;
@@ -263,6 +289,7 @@ main {
 
 #planet-nav .planet-name {
   padding: 10px 0;
+  font-size: 20px;
 }
 
 #planet-nav .control-btn {
@@ -338,6 +365,7 @@ main {
   height: 100vh;
   background: black;
   display: flex;
+  overflow: hidden;
 }
 
 .content-section .img-wrapper {
@@ -356,7 +384,6 @@ main {
 
 .content-section .content-wrapper {
   width: calc(100% - 200px);
-  height: 100%;
   background: linear-gradient(
     to bottom,
     rgba(68, 68, 68, 0.3),
@@ -367,6 +394,25 @@ main {
   backdrop-filter: blur(30px black);
   border-right: 1px solid rgba(68, 68, 68, 0.3);
   border-left: 1px solid rgba(68, 68, 68, 0.3);
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+/* width */
+.content-section .content-wrapper::-webkit-scrollbar {
+  width: 7px;
+  cursor: pointer;
+}
+
+/* Track */
+.content-section .content-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.content-section .content-wrapper::-webkit-scrollbar-thumb {
+  background: rgb(31, 31, 31);
+  border-radius: 20px;
 }
 
 .content-section .content-wrapper h1 {
@@ -431,8 +477,8 @@ main {
   font-size: 12px;
 }
 
-.planet-section .planet-content .user-data-wrapper .user-wrapper .user-age,
-.planet-section .planet-content .user-data-wrapper .user-wrapper .user-weight {
+.planet-section .planet-content .user-data-wrapper .user-wrapper #user-age,
+.planet-section .planet-content .user-data-wrapper .user-wrapper #user-weight {
   color: #4a53d1;
   font-size: 16px;
 }
@@ -490,6 +536,16 @@ main {
     width: 100%;
     height: 100vh;
   }
+
+  #planet-nav {
+    max-width: 60vw;
+  }
+}
+
+@media screen and (max-width: 930px) {
+  .content-section .content-wrapper {
+    padding: 10px;
+  }
 }
 
 @media screen and (max-width: 520px) {
@@ -506,6 +562,10 @@ main {
     width: calc(100% - 80px);
     border-right: none;
     border-top: 1px solid rgba(68, 68, 68, 0.3);
+  }
+
+  #planet-nav {
+    max-width: 100vw;
   }
 }
 

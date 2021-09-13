@@ -29,18 +29,20 @@ export function updateInfo(state, planets, data) {
   }
 
   diameter.innerHTML =
-    '<span>Diameter:</span> <br>' + planet.meanRadius * 2 + ' km';
+    '<span id="property-name">Diameter:</span> <br>' +
+    planet.meanRadius * 2 +
+    ' km';
   mass.innerHTML =
-    '<span>Mass:</span> <br>' +
+    '<span id="property-name">Mass:</span> <br>' +
     planet.mass.massValue +
     ' x 10<sup>' +
     planet.mass.massExponent +
-    '</sup>';
+    '</sup> kg';
   if (planet.gravity == 0) {
     gravity.innerHTML = '';
   } else {
     gravity.innerHTML =
-      '<span>Gravity:</span> <br> <span id="planet-gravity">' +
+      '<span id="property-name">Gravity:</span> <br> <span id="planet-gravity">' +
       planet.gravity +
       '</span> m.s<sup>-2</sup>';
   }
@@ -48,7 +50,7 @@ export function updateInfo(state, planets, data) {
     orbitalPeriod.innerHTML = '';
   } else {
     orbitalPeriod.innerHTML =
-      '<span>Year:</span> <br> <span id="planet-year">' +
+      '<span id="property-name">Year:</span> <br> <span id="planet-year">' +
       planet.sideralOrbit +
       '</span> earth days';
   }
@@ -56,7 +58,7 @@ export function updateInfo(state, planets, data) {
     discoveredBy.innerHTML = '';
   } else {
     discoveredBy.innerHTML =
-      '<span>Siscovered by:</span> <br>' +
+      '<span id="property-name">Discovered by:</span> <br>' +
       planet.discoveredBy +
       ' (' +
       planet.discoveryDate +
