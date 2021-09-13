@@ -21,6 +21,41 @@ const userInputSubmitBtn = document.querySelector('#user-input-submit');
 const userInputSkipBtn = document.querySelector('#user-input-skip');
 
 /**
+ * @function scrollFunction - smoothly scrolls to a given target HTML DOM element
+ *
+ * @param {node} target - HTML DOM element to scroll to
+ */
+const scrollFunction = function (target) {
+  var scrollContainer = target;
+  do {
+    //find scroll container
+    scrollContainer = scrollContainer.parentNode;
+    if (!scrollContainer) return;
+    scrollContainer.scrollTop += 1;
+  } while (scrollContainer.scrollTop == 0);
+
+  var targetY = 0;
+  do {
+    //find the top of target relatively to the container
+    if (target == scrollContainer) break;
+    targetY += target.offsetTop;
+  } while ((target = target.offsetParent));
+
+  const scroll = function (c, a, b, i) {
+    i++;
+    if (i > 30) return;
+    c.scrollTop = a + ((b - a) / 30) * i;
+    setTimeout(function () {
+      scroll(c, a, b, i);
+    }, 20);
+  };
+  // start scrolling
+  scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
+};
+
+window.smoothScroll = scrollFunction(document.querySelector('#planet-nav'));
+
+/**
  * @function handleChange - handles the triggered input event
  *
  * @param {inputEvent} event - the event that is triggered by the event listener
@@ -550,6 +585,7 @@ const infoBtn = document.querySelector('.Info-btn');
 const closeIcon = document.querySelector('#close-icon-1');
 const moreInfoBtn = document.querySelector('.more-info-btn');
 const closeIcon2 = document.querySelector('#close-icon-2');
+const scrollBtn = document.querySelector('#scroll-btn');
 
 function openInfoTab() {
   const infoTab = document.querySelector('#info-tab');
@@ -580,7 +616,7 @@ function openPlanetInfoTab() {
 
   planetInfoTab.style.transition = '0.5s ease-in-out';
   planetInfoTab.style.top = '1px';
-  planetInfoTab.style.height = '100%';
+  planetInfoTab.style.height = '100vh';
 
   renderPlanet();
 }
@@ -597,3 +633,8 @@ infoBtn.addEventListener('click', openInfoTab);
 closeIcon.addEventListener('click', closeInfoTab);
 moreInfoBtn.addEventListener('click', openPlanetInfoTab);
 closeIcon2.addEventListener('click', closePlanetInfoTab);
+scrollBtn.addEventListener('click', () => {
+  document.querySelector('.main').smoothScroll = scrollFunction(
+    document.querySelector('.content-section')
+  );
+});

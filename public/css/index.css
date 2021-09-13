@@ -136,14 +136,14 @@ main {
 .Info-btn {
   position: absolute;
   right: 10px;
-  top: 100px;
+  top: 60px;
 }
 
 #info-tab {
   /* display: none; */
   position: absolute;
   right: 10px;
-  top: 100px;
+  top: 60px;
   color: white;
   padding: 20px;
   width: 30vw;
@@ -155,7 +155,7 @@ main {
   pointer-events: none;
   opacity: 0;
   height: min-content;
-  max-height: calc(100vh - 230px);
+  max-height: calc(100vh - 190px);
   overflow-y: hidden;
 }
 
@@ -266,8 +266,8 @@ main {
 }
 
 #planet-nav {
-  position: absolute;
-  bottom: 0;
+  position: fixed;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;
@@ -282,7 +282,6 @@ main {
     rgba(95, 95, 95, 0.247),
     rgba(95, 95, 95, 0.247)
   );
-  margin: 0 auto 10px auto;
   border-radius: 20px;
   width: 80%;
 }
@@ -294,6 +293,7 @@ main {
 
 #planet-nav .control-btn {
   cursor: pointer;
+  padding: 0 20px;
 }
 
 /* Style the planet-info-container */
@@ -433,6 +433,26 @@ main {
   position: relative;
 }
 
+#scroll-btn {
+  position: absolute;
+  bottom: 100px;
+  right: 20px;
+  background: #2c34a1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 10px 5px 10px;
+  border-radius: 5px;
+  z-index: 5;
+  cursor: pointer;
+  display: none;
+}
+
+#scroll-icon {
+  width: 20px;
+  height: 20px;
+}
+
 .planet-section .divider {
   width: 50%;
   height: 100%;
@@ -535,6 +555,10 @@ main {
   .planet-section {
     width: 100%;
     height: 100vh;
+  }
+
+  #scroll-btn {
+    display: block;
   }
 
   #planet-nav {
