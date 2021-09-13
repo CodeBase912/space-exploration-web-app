@@ -1,25 +1,47 @@
 import * as THREE from '../three.module.js';
 import '../tween.umd.js';
 
+/**
+ * @function moveCameraBackward - smoothly moves the camera to the next outer
+ *                                planet from the current in focus/selected
+ *                                planet. The function uses TWEEN and three.js
+ *                                Quarternions to smoothly animate the camera's
+ *                                motion
+ *
+ * @param {object} camera - the camera of the three.js scene
+ *
+ * @param {object} controls - the orbit controls of the three.js scene
+ *
+ * @param {array} planets - an array of all the planets locations in the
+ *                          three.js scene
+ *
+ * @param {array} state - the application state variable that determines
+ *                        which planet is in focus/selected
+ */
 export function moveCameraForward(camera, controls, planets, state) {
   // Find the active planet/selected planet from the state variable
   const planetIndex = state.findIndex((element) => element == 1);
+  // Check if the selected planet is the last/outer-most planet
   if (planetIndex < planets.length - 1) {
+    // If the selected planet if not the last planet then move camera to the next
+    // outer planet
     state[planetIndex] = 0;
     state[planetIndex + 1] = 1;
-    // controls.enabled = false;
+    // Define the initial posiiton of the camera
     const coords = {
       x: camera.position.x,
       y: camera.position.y,
       z: camera.position.z,
     };
 
-    const qmRotation = new THREE.Quaternion(); //initiate an empty Qt to be filled by the .slerp function
+    // Define an empty Quaternion to be filled by the .slerp function in the
+    // TWEEN animation's .onUpdate function for the camera's rotation
+    const qmRotation = new THREE.Quaternion();
 
-    // backup original rotation
+    // Backup original rotation
     const startRotation = new THREE.Euler().copy(camera.rotation);
 
-    // final rotation (with lookAt)
+    // Final rotation (with lookAt)
     camera.lookAt(
       planets[planetIndex + 1].x,
       planets[planetIndex + 1].y,
@@ -28,11 +50,13 @@ export function moveCameraForward(camera, controls, planets, state) {
     const endRotation = new THREE.Euler().copy(camera.rotation);
     const targetQuaternionForRotation = camera.quaternion;
 
-    // revert to original rotation
+    // Revert to original rotation
     camera.rotation.copy(startRotation);
 
-    const curQuaternionForRotation = camera.quaternion; //the starting point of your rotation
+    // Define the starting point of the camera rotation
+    const curQuaternionForRotation = camera.quaternion;
 
+    // Define the camera's rotation TWEEN animation
     const tweenRotation = new TWEEN.Tween({
       camera: camera.rotation,
       t: 0,
@@ -55,16 +79,19 @@ export function moveCameraForward(camera, controls, planets, state) {
         qmRotation.normalize();
       })
       .onComplete(() => {
+        // Once the initial camera rotation animation is complete start the
+        // camera position animation
         tween.start();
       });
 
+    // Start the camera rotation animation
     tweenRotation.start();
 
-    //tweens between zero and 1 values along Quaternion's SLERP method (http://threejs.org/docs/#Reference/Math/Quaternion)
+    // Define an empty Quaternion to be filled by the .slerp function in the
+    // TWEEN animation's .onUpdate function for the camera's posiiton
+    const qm = new THREE.Quaternion();
 
-    const qm = new THREE.Quaternion(); //initiate an empty Qt to be filled by the .slerp function
-
-    // final rotation (with lookAt)
+    // Final rotation (with lookAt)
     camera.position.set(
       planets[planetIndex + 1].x,
       planets[planetIndex + 1].y + planets[planetIndex + 1].radius,
@@ -72,11 +99,13 @@ export function moveCameraForward(camera, controls, planets, state) {
     );
     const targetQuaternion = camera.quaternion;
 
-    // revert to original rotation
+    // Revert to original rotation
     camera.position.set(coords.x, coords.y, coords.z);
 
-    const curQuaternion = camera.quaternion; //the starting point of your rotation
+    // Define the starting point of the camera's posiiton
+    const curQuaternion = camera.quaternion;
 
+    // Define the camera's position TWEEN animation
     const tween = new TWEEN.Tween({ camera: camera.position, t: 0 })
       .to(
         {
@@ -91,12 +120,14 @@ export function moveCameraForward(camera, controls, planets, state) {
       )
       .easing(TWEEN.Easing.Quadratic.InOut)
       .onUpdate(function () {
-        const qmRotation = new THREE.Quaternion(); //initiate an empty Qt to be filled by the .slerp function
+        // Define an empty Quaternion to be filled by the .slerp function in the
+        // TWEEN animation's .onUpdate function for the camera's rotation
+        const qmRotation = new THREE.Quaternion();
 
-        // backup original rotation
+        // Backup original rotation
         const startRotation = new THREE.Euler().copy(camera.rotation);
 
-        // final rotation (with lookAt)
+        // Final rotation (with lookAt)
         camera.lookAt(
           planets[planetIndex + 1].x,
           planets[planetIndex + 1].y,
@@ -105,11 +136,13 @@ export function moveCameraForward(camera, controls, planets, state) {
         const endRotation = new THREE.Euler().copy(camera.rotation);
         const targetQuaternionForRotation = camera.quaternion;
 
-        // revert to original rotation
+        // Revert to original rotation
         camera.rotation.copy(startRotation);
 
-        const curQuaternionForRotation = camera.quaternion; //the starting point of your rotation
+        // The starting point of the camera's rotation
+        const curQuaternionForRotation = camera.quaternion;
 
+        // The camera's rotation TWEEN animation
         const tweenRotation = new TWEEN.Tween({
           camera: camera.rotation,
           t: 0,
@@ -128,51 +161,73 @@ export function moveCameraForward(camera, controls, planets, state) {
           .easing(TWEEN.Easing.Quadratic.InOut)
           .onUpdate(function () {
             qmRotation.slerp(endRotation, this.t);
-            // THREE.Quaternion.slerp(curQuaternion, targetQuaternion, qm, this.t);
             qmRotation.normalize();
           });
 
+        // Start the camera'a rotation TWEEN animation
         tweenRotation.start();
 
         qm.slerp(targetQuaternion, this.t);
-        // THREE.Quaternion.slerp(curQuaternion, targetQuaternion, qm, this.t);
         qm.normalize();
       })
       .onComplete(() => {
-        // // let controls = new OrbitControls( camera, renderer.domElement );
-        // controls.enabled = true;
+        // Once the animation is complete, update the target of the orbit
+        // controls
         controls.target.set(
           planets[planetIndex + 1].x,
           planets[planetIndex + 1].y,
           planets[planetIndex + 1].z
         );
-
-        // tweenRotation.start();
       });
 
+    // Update the HTML DOM element that display's the planet's name in the
+    // planet info tab
     document.querySelector('.planet-name').innerHTML =
       planets[planetIndex + 1].name;
   }
 }
 
+/**
+ * @function moveCameraBackward - smoothly moves the camera to the next inner
+ *                                planet from the current in focus/selected
+ *                                planet. The function uses TWEEN and three.js
+ *                                Quarternions to smoothly animate the camera's
+ *                                motion
+ *
+ * @param {object} camera - the camera of the three.js scene
+ *
+ * @param {object} controls - the orbit controls of the three.js scene
+ *
+ * @param {array} planets - an array of all the planets locations in the
+ *                          three.js scene
+ *
+ * @param {array} state - the application state variable that determines
+ *                        which planet is in focus/selected
+ */
 export function moveCameraBackward(camera, controls, planets, state) {
   // Find the active planet/selected planet from the state variable
   const planetIndex = state.findIndex((element) => element == 1);
+  // Check if the selected planet is the first/inner-most planet
   if (planetIndex > 0) {
+    // If the selected planet is not the first/inner-most planet then move
+    // camera to the next inner planet
     state[planetIndex] = 0;
     state[planetIndex - 1] = 1;
+    // Define the camera's initial position
     const coords = {
       x: camera.position.x,
       y: camera.position.y,
       z: camera.position.z,
     };
 
-    const qmRotation = new THREE.Quaternion(); //initiate an empty Qt to be filled by the .slerp function
+    // Define an empty Quaternion to be filled by the .slerp function in the
+    // TWEEN animation's .onUpdate function for the camera's rotation
+    const qmRotation = new THREE.Quaternion();
 
-    // backup original rotation
+    // Backup original rotation
     const startRotation = new THREE.Euler().copy(camera.rotation);
 
-    // final rotation (with lookAt)
+    // Final rotation (with lookAt)
     camera.lookAt(
       planets[planetIndex - 1].x,
       planets[planetIndex - 1].y,
@@ -181,11 +236,13 @@ export function moveCameraBackward(camera, controls, planets, state) {
     const endRotation = new THREE.Euler().copy(camera.rotation);
     const targetQuaternionForRotation = camera.quaternion;
 
-    // revert to original rotation
+    // Revert to original rotation
     camera.rotation.copy(startRotation);
 
-    const curQuaternionForRotation = camera.quaternion; //the starting point of your rotation
+    // The starting point of the camera's rotation
+    const curQuaternionForRotation = camera.quaternion;
 
+    // Define the camera's rotation TWEEN animation
     const tweenRotation = new TWEEN.Tween({
       camera: camera.rotation,
       t: 0,
@@ -204,20 +261,20 @@ export function moveCameraBackward(camera, controls, planets, state) {
       .easing(TWEEN.Easing.Quadratic.InOut)
       .onUpdate(function () {
         qmRotation.slerp(endRotation, this.t);
-        // THREE.Quaternion.slerp(curQuaternion, targetQuaternion, qm, this.t);
         qmRotation.normalize();
       })
       .onComplete(() => {
         tween.start();
       });
 
+    // Start the camera's rotation TWEEN animation
     tweenRotation.start();
 
-    //tweens between zero and 1 values along Quaternion's SLERP method (http://threejs.org/docs/#Reference/Math/Quaternion)
+    // Define an empty Quaternion to be filled by the .slerp function in the
+    // TWEEN animation's .onUpdate function for the camera's position
+    const qm = new THREE.Quaternion();
 
-    const qm = new THREE.Quaternion(); //initiate an empty Qt to be filled by the .slerp function
-
-    // final rotation (with lookAt)
+    // Final rotation (with lookAt)
     camera.position.set(
       planets[planetIndex - 1].x,
       planets[planetIndex - 1].y + 0.8,
@@ -225,11 +282,13 @@ export function moveCameraBackward(camera, controls, planets, state) {
     );
     const targetQuaternion = camera.quaternion;
 
-    // revert to original rotation
+    // Revert to original rotation
     camera.position.set(coords.x, coords.y, coords.z);
 
-    const curQuaternion = camera.quaternion; //the starting point of your rotation
+    // The starting point of the camera's posiiton
+    const curQuaternion = camera.quaternion;
 
+    // Define the TWEEN animation for the camera's position
     const tween = new TWEEN.Tween({ camera: camera.position, t: 0 })
       .to(
         {
@@ -244,12 +303,16 @@ export function moveCameraBackward(camera, controls, planets, state) {
       )
       .easing(TWEEN.Easing.Quadratic.InOut)
       .onUpdate(function () {
-        const qmRotation = new THREE.Quaternion(); //initiate an empty Qt to be filled by the .slerp function
+        // Here we rotate the camera to look at the target planet
 
-        // backup original rotation
+        // Define an empty Quaternion to be filled by the .slerp function in the
+        // TWEEN animation's .onUpdate function for the camera's rotation
+        const qmRotation = new THREE.Quaternion();
+
+        // Backup original rotation
         const startRotation = new THREE.Euler().copy(camera.rotation);
 
-        // final rotation (with lookAt)
+        // Final rotation (with lookAt)
         camera.lookAt(
           planets[planetIndex - 1].x,
           planets[planetIndex - 1].y,
@@ -292,17 +355,17 @@ export function moveCameraBackward(camera, controls, planets, state) {
         qm.normalize();
       })
       .onComplete(() => {
-        // // let controls = new OrbitControls( camera, renderer.domElement );
-        // controls.enabled = true;
+        // Once the animation is complete update the target for the orbit
+        // controls
         controls.target.set(
           planets[planetIndex - 1].x,
           planets[planetIndex - 1].y,
           planets[planetIndex - 1].z
         );
-
-        // tweenRotation.start();
       });
 
+    // Update the HTML DOM element that display's the planet's name in the
+    // planet info tab
     document.querySelector('.planet-name').innerHTML =
       planets[planetIndex - 1].name;
   }

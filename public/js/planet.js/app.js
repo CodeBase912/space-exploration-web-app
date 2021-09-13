@@ -1,24 +1,40 @@
+// Import three.js modules
 import * as THREE from '../three.module.js';
 import { OrbitControls } from '../OrbitControls.js';
+// Import TWEEN module
+import '../tween.umd.js';
+// Import Custom Components
 import Planet from '../components/Planets.js';
 import { createAsteroidBelt } from '../components/Asteriods.js';
 import { createStars } from '../components/Stars.js';
+// Import Utility Functions
 import {
   moveCameraForward,
   moveCameraBackward,
 } from '../Util/cameraMovements.js';
 import { updateInfo } from '../Util/Utils.js';
 import { formatNumber } from '../Util/Utils.js';
-import { getUserData } from '../app.js';
-import '../tween.umd.js';
+import { getUserData } from '../Util/Utils.js';
 
+/**
+ * @function renderPlanet - render the selected planet in the specific planet
+ *                          information tab
+ */
 export function renderPlanet() {
+  // --------------------------------------------------------------------------
+  // Define the necessary variables to render the three.js scene
+  // --------------------------------------------------------------------------
+
   const canvasWrapper = document.querySelector('.canvas-wrapper');
   const width = canvasWrapper.getBoundingClientRect().width;
   const height = canvasWrapper.getBoundingClientRect().height;
   const canvas = document.querySelector('#weglPlanet');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 20000);
+
+  // --------------------------------------------------------------------------
+  // Render the three.js scene
+  // --------------------------------------------------------------------------
 
   const renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -28,7 +44,9 @@ export function renderPlanet() {
   renderer.setSize(width, height);
   renderer.setPixelRatio(window.devicePixelRatio);
 
-  // Place the planets' info in a variable
+  // --------------------------------------------------------------------------
+  // Place all the planets' information in a variable for easy access
+  // --------------------------------------------------------------------------
   const planetInfo = {
     sun: {
       planetGenerator: [4, 0, 0, 0, 'Sun', '../img/sun.jpg', '', 0, 0],
@@ -184,9 +202,9 @@ export function renderPlanet() {
     },
   };
 
-  /**
-   * Add Planet to the scene
-   */
+  // --------------------------------------------------------------------------
+  // Determine which planet was selected and add it to the scene
+  // --------------------------------------------------------------------------
 
   const planetName = document.querySelector('#planet-name');
   const activePlanetName = planetName.innerHTML.toLowerCase();
@@ -196,15 +214,16 @@ export function renderPlanet() {
   planetObj.addOrbits();
   const planetLocation = planetObj.setPlanetOrbitPosition();
   const planet = planetObj.planet;
-  console.log(planetObj.planet);
+  // If the selected planet is Uranus, rotate it along the y-axis. This is done
+  // to make it's orientation in space look realistic
   if (planetObj.name == 'Uranus') {
     planet.rotation.y = 59;
   }
   scene.add(planet);
 
-  /**
-   * Add Lights to the scene
-   */
+  // --------------------------------------------------------------------------
+  // Add Lights to the scene
+  // --------------------------------------------------------------------------
 
   const pointLight = new THREE.PointLight(0xffffff, 1, 500);
   pointLight.position.x = 0;
@@ -218,24 +237,30 @@ export function renderPlanet() {
   pointLight2.position.z = -30;
   scene.add(pointLight2);
 
-  /**
-   * Camera position
-   */
+  // --------------------------------------------------------------------------
+  // Set the camera position
+  // --------------------------------------------------------------------------
 
   camera.position.x = 0;
   camera.position.y = 0;
   camera.position.z = 14;
-  // camera.lookAt(0,0,0);
 
-  /**
-   * Add Orbital Controls
-   */
+  // --------------------------------------------------------------------------
+  // Add Orbit Controls
+  // --------------------------------------------------------------------------
 
   let controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0, 0);
   controls.enableZoom = false;
   controls.enablePan = false;
 
+  // --------------------------------------------------------------------------
+  // Animate the render loop
+  // --------------------------------------------------------------------------
+
+  /**
+   * @function animate - animates the render loop of the three.js canvas
+   */
   function animate() {
     requestAnimationFrame(animate);
 
@@ -247,17 +272,21 @@ export function renderPlanet() {
   }
   animate();
 
-  /**
-   * Set the planetInfoTab Data
-   */
+  // --------------------------------------------------------------------------
+  // Insert the selected planet's data in the specific planet information tab
+  // --------------------------------------------------------------------------
 
+  // Get the saved user data from local storage
   const user = getUserData();
   const planetGravity = document.querySelector('#planet-gravity');
   const planetYear = document.querySelector('#planet-year');
 
+  // Check if the user's age and weight are defined
   if (user.age && (!user.weight || user.weight == '')) {
     // Only the user's age is given
     if (planetName.innerHTML == 'Sun') {
+      // If the selected planet/celstial body is the Sun, hide the HTML
+      // DOM elements that display the user's age and weight data
       document.querySelectorAll('.user-wrapper')[0].style.opacity = 0;
       document.querySelectorAll('.user-wrapper')[0].style.pointerEvents =
         'none';
@@ -269,17 +298,24 @@ export function renderPlanet() {
       const userAge = formatNumber(
         (user.age * 365) / parseFloat(planetYear.innerHTML)
       );
+
       // Hide the HTML DOM element that displays user's weight
       document.querySelectorAll('.user-wrapper')[1].style.opacity = 0;
       document.querySelectorAll('.user-wrapper')[1].style.pointerEvents =
         'none';
+
       // Update the HTML DOM element that displays user's age
       document.querySelectorAll('.user-wrapper')[0].style.opacity = 1;
       document.querySelectorAll('.user-wrapper')[0].style.pointerEvents = 'all';
       document.querySelectorAll('.user-age-on-planet')[0].innerHTML =
         planetName.innerHTML;
-      // If the planet is Earth display the user's input data
+
+      // Check if the selected planet is Earth. We do this check here to
+      // ensure that the user's age & weight data that will be displayed
+      // for planet Earth is exactly the same as the user's input data
+      // and not the calculated data
       if (planetName.innerHTML == 'Earth') {
+        // If the planet is Earth display the user's input data
         document.querySelectorAll('.user-age')[0].innerHTML = user.age;
       } else {
         // Otherwise enter the calculated data
@@ -289,6 +325,8 @@ export function renderPlanet() {
   } else if (user.weight && (!user.age || user.age == '')) {
     // Only the user's weight is given
     if (planetName.innerHTML == 'Sun') {
+      // If the selected planet/celstial body is the Sun, hide the HTML
+      // DOM elements that display the user's age and weight data
       document.querySelectorAll('.user-wrapper')[0].style.opacity = 0;
       document.querySelectorAll('.user-wrapper')[0].style.pointerEvents =
         'none';
@@ -300,17 +338,24 @@ export function renderPlanet() {
       const userWeight = formatNumber(
         (user.weight / 9.8) * parseFloat(planetGravity.innerHTML)
       );
+
       // Hide the HTML DOM element that displays user's age
       document.querySelectorAll('.user-wrapper')[0].style.opacity = 0;
       document.querySelectorAll('.user-wrapper')[0].style.pointerEvents =
         'none';
+
       // Update the HTML DOM element that displays user's weight
       document.querySelectorAll('.user-wrapper')[1].style.opacity = 1;
       document.querySelectorAll('.user-wrapper')[1].style.pointerEvents = 'all';
       document.querySelectorAll('.user-age-on-planet')[1].innerHTML =
         planetName.innerHTML;
-      // If the planet is Earth display the user's input data
+
+      // Check if the selected planet is Earth. We do this check here to
+      // ensure that the user's age & weight data that will be displayed
+      // for planet Earth is exactly the same as the user's input data
+      // and not the calculated data
       if (planetName.innerHTML == 'Earth') {
+        // If the planet is Earth display the user's input data
         document.querySelectorAll('.user-age')[1].innerHTML = user.weight;
       } else {
         // Otherwise enter the calculated data
@@ -320,6 +365,8 @@ export function renderPlanet() {
   } else if (user.age && user.weight) {
     // Both the user's age and weight are given
     if (planetName.innerHTML == 'Sun') {
+      // If the selected planet/celstial body is the Sun, hide the HTML
+      // DOM elements that display the user's age and weight data
       document.querySelectorAll('.user-wrapper')[0].style.opacity = 0;
       document.querySelectorAll('.user-wrapper')[0].style.pointerEvents =
         'none';
@@ -340,23 +387,23 @@ export function renderPlanet() {
       document.querySelectorAll('.user-wrapper')[0].style.pointerEvents = 'all';
       document.querySelectorAll('.user-age-on-planet')[0].innerHTML =
         planetName.innerHTML;
-      // If the planet is Earth display the user's input data
-      if (planetName.innerHTML == 'Earth') {
-        document.querySelectorAll('.user-age')[0].innerHTML = user.age;
-      } else {
-        // Otherwise enter the calculated data
-        document.querySelectorAll('.user-age')[0].innerHTML = userAge;
-      }
       // Update the HTML DOM element that displays user's weight
       document.querySelectorAll('.user-wrapper')[1].style.opacity = 1;
       document.querySelectorAll('.user-wrapper')[1].style.pointerEvents = 'all';
       document.querySelectorAll('.user-age-on-planet')[1].innerHTML =
         planetName.innerHTML;
-      // If the planet is Earth display the user's input data
+
+      // Check if the selected planet is Earth. We do this check here to
+      // ensure that the user's age & weight data that will be displayed
+      // for planet Earth is exactly the same as the user's input data
+      // and not the calculated data
       if (planetName.innerHTML == 'Earth') {
+        // If the planet is Earth display the user's input data
+        document.querySelectorAll('.user-age')[0].innerHTML = user.age;
         document.querySelectorAll('.user-age')[1].innerHTML = user.weight;
       } else {
         // Otherwise enter the calculated data
+        document.querySelectorAll('.user-age')[0].innerHTML = userAge;
         document.querySelectorAll('.user-age')[1].innerHTML = userWeight;
       }
     }
@@ -370,20 +417,25 @@ export function renderPlanet() {
     document.querySelectorAll('.user-wrapper')[1].style.pointerEvents = 'none';
   }
 
+  // Update the HTML DOM element that display's the selected planet's name
   const planetInfoTabTitle = document
     .querySelector('.content-wrapper')
     .querySelector('h1');
   planetInfoTabTitle.innerHTML = planetName.innerHTML;
 
+  // Update the HTML DOM elements that display's the selected planet's
+  // atmosphere and climate
   const planetAtmosphere = document.querySelector('#atmosphere');
   const planetClimate = document.querySelector('#climate');
+  planetAtmosphere.innerHTML = planetInfo[activePlanetName].atmosphere;
+  planetClimate.innerHTML = planetInfo[activePlanetName].climate;
+
+  // Update the HTML DOM element that display's the selected planet's
+  // content
   const planetContent = document.querySelector('.planet-content');
   let content = [];
   Object.entries(planetInfo[activePlanetName].data).map((paragraph) => {
     content.push('<p>' + paragraph[1] + '</p>');
   });
-
   planetContent.innerHTML = content.join('');
-  planetAtmosphere.innerHTML = planetInfo[activePlanetName].atmosphere;
-  planetClimate.innerHTML = planetInfo[activePlanetName].climate;
 }

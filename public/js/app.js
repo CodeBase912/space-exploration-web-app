@@ -1,17 +1,30 @@
+// Import three.js modules
 import * as THREE from './three.module.js';
 import { OrbitControls } from './OrbitControls.js';
+// Import Our Custom component
 import Planet from './components/Planets.js';
 import { createAsteroidBelt } from './components/Asteriods.js';
 import { createStars } from './components/Stars.js';
+// Import Utility functions
 import {
   moveCameraForward,
   moveCameraBackward,
 } from './Util/cameraMovements.js';
-import { updateInfo } from './Util/Utils.js';
+import {
+  updateInfo,
+  handleInputEvent,
+  saveUserInput,
+  getUserData,
+  scrollFunction,
+} from './Util/Utils.js';
 import { renderPlanet } from './planet.js/app.js';
 import './planet.js/app.js';
 
-// Handle the user input
+// --------------------------------------------------------------------------
+// Handle the user's input data (when user enter's their age and weight)
+// --------------------------------------------------------------------------
+
+// Select the necessary HTML DOM elements
 const main = document.getElementsByTagName('main')[0];
 const userInputContainer = document.querySelector('#user-input-tab');
 const ageInput = document.querySelector('#age-input');
@@ -20,146 +33,18 @@ const inputErrorMessage = document.querySelector('#error-msg');
 const userInputSubmitBtn = document.querySelector('#user-input-submit');
 const userInputSkipBtn = document.querySelector('#user-input-skip');
 
-/**
- * @function scrollFunction - smoothly scrolls to a given target HTML DOM element
- *
- * @param {node} target - HTML DOM element to scroll to
- */
-const scrollFunction = function (target) {
-  var scrollContainer = target;
-  do {
-    //find scroll container
-    scrollContainer = scrollContainer.parentNode;
-    if (!scrollContainer) return;
-    scrollContainer.scrollTop += 1;
-  } while (scrollContainer.scrollTop == 0);
-
-  var targetY = 0;
-  do {
-    //find the top of target relatively to the container
-    if (target == scrollContainer) break;
-    targetY += target.offsetTop;
-  } while ((target = target.offsetParent));
-
-  const scroll = function (c, a, b, i) {
-    i++;
-    if (i > 30) return;
-    c.scrollTop = a + ((b - a) / 30) * i;
-    setTimeout(function () {
-      scroll(c, a, b, i);
-    }, 20);
-  };
-  // start scrolling
-  scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
-};
-
-window.smoothScroll = scrollFunction(document.querySelector('#planet-nav'));
-
-/**
- * @function handleChange - handles the triggered input event
- *
- * @param {inputEvent} event - the event that is triggered by the event listener
- *
- * @param {object} elementInFocus - the HTML DOM element that triggered the
- *                                  event
- *
- * @param {object} otherElement - the HTML DOM element that is not in focus.
- *                                Needed to determine whether to change the
- *                                style of the @param errorMessage HTML DOM
- *                                element
- *
- * @param {object} errorMessage - the HTML DOM element that displays the error
- *                                message
- */
-export function handleInputEvent(
-  event,
-  elementInFocus,
-  otherElement,
-  errorMessage
-) {
-  // Check if the user input is a number
-  if (isNaN(event.target.value)) {
-    // User input is not a number. Display error message
-    elementInFocus.classList.add('error');
-    errorMessage.innerHTML = 'Please enter a number';
-    errorMessage.style.display = 'block';
-  } else {
-    // User input is a number. Remove error class from alement in focus
-    elementInFocus.classList.remove('error');
-    // Check if the other element has an error
-    if (otherElement.getAttribute('class') == 'user-input-input error') {
-      // The other element has an error. Don't remove error message
-      // (i.e. do nothing)
-    } else {
-      // The other element does not have an error. Hide the error message
-      errorMessage.style.display = 'none';
-    }
-  }
-}
-
-/**
- * @function saveUserInput - saves the user input into local storage
- *
- * @param {number} age - the age of the user
- * @param {number} weight - the weight of the user
- */
-export function saveUserInput(age, weight) {
-  // Check if either the age of weight is given
-  if (age || weight) {
-    // Check if the age and weight are numbers
-    if (
-      (age && !isNaN(age) && weight && !isNaN(weight)) || // If both age & weight are given & are both numbers
-      (age && !isNaN(age) && !isNaN(weight)) || // If age is given & is a number & weight is not given
-      (weight && !isNaN(weight) && !isNaN(age)) // If weight is given & is a number  & weight is not given
-    ) {
-      // Either age or weight or both are given. Save the data
-
-      main.style.pointerEvents = 'all';
-      if (age != '') {
-        localStorage.setItem('age', age);
-      }
-      if (weight != '') {
-        localStorage.setItem('weight', weight);
-      }
-      userInputContainer.style.display = 'none';
-      inputErrorMessage.style.display = 'none';
-    } else {
-      // Either age or weight or both are defined but one or both is not a
-      // number. Display error message
-      inputErrorMessage.innerHTML = 'Please enter a number';
-      inputErrorMessage.style.display = 'block';
-    }
-  } else {
-    // No data was given. Display an error message
-    inputErrorMessage.innerHTML =
-      'You need to provide at least your age or weight';
-    inputErrorMessage.style.display = 'block';
-  }
-}
-
-/**
- * @function getUserData - gets the user's age and weight data from local
- *                         storage
- *
- * @return {object} - an object that contains the user's age and weight
- */
-export function getUserData() {
-  const age = localStorage.getItem('age');
-  const weight = localStorage.getItem('weight');
-  return { age, weight };
-}
-
-// Initially we the user should not be able to interact with the main
-// app
+// Initially the user should not be able to interact with the main
+// app, i.e. they should either enter their age & weight details or
+// skip that step in order to interact with the app
 main.style.pointerEvents = 'none';
 
+// Handle the user input
 ageInput.addEventListener('input', (event) =>
   handleInputEvent(event, ageInput, weightInput, inputErrorMessage)
 );
 weightInput.addEventListener('input', (event) =>
   handleInputEvent(event, weightInput, ageInput, inputErrorMessage)
 );
-
 userInputSubmitBtn.addEventListener('click', () =>
   saveUserInput(ageInput.value, weightInput.value)
 );
@@ -169,8 +54,10 @@ userInputSkipBtn.addEventListener('click', () => {
   main.style.pointerEvents = 'all';
 });
 
-const prevBtn = document.querySelector('#prev-btn');
-const nextBtn = document.querySelector('#next-btn');
+// --------------------------------------------------------------------------
+// Create and render the three.js scene as well as the its objects
+// (planets, stars, etc.)
+// --------------------------------------------------------------------------
 
 const canvas = document.querySelector('.webgl');
 const scene = new THREE.Scene();
@@ -189,21 +76,14 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
-/**
- * The sun
- */
-
+// Create the Sun
 const sunObj = new Planet(8, 0, 0, 0, 'Sun', '../img/sun.jpg', '', 0, 0);
 const Sun = sunObj.createPlanet();
-// console.log(sun);
 sunObj.addOrbits();
 const sunLocation = sunObj.setPlanetOrbitPosition();
 const sun = sunObj.planet;
 
-/**
- * Mercury
- */
-
+// Create Mercury
 const mercuryObj = new Planet(
   0.3,
   0,
@@ -216,15 +96,11 @@ const mercuryObj = new Planet(
   0
 );
 const Mercury = mercuryObj.createPlanet();
-// console.log(mercury);
 mercuryObj.addOrbits();
 const mercuryLocation = mercuryObj.setPlanetOrbitPosition();
 const mercury = mercuryObj.planet;
 
-/**
- * Venus
- */
-
+// Create Venus
 const venusObj = new Planet(
   0.4,
   0,
@@ -237,15 +113,11 @@ const venusObj = new Planet(
   30
 );
 const Venus = venusObj.createPlanet();
-// console.log(venus);
 venusObj.addOrbits();
 const venusLocation = venusObj.setPlanetOrbitPosition();
 const venus = venusObj.planet;
 
-/**
- * Earth
- */
-
+// Create Earth
 const earthObj = new Planet(
   0.5,
   0,
@@ -258,15 +130,11 @@ const earthObj = new Planet(
   60
 );
 const Earth = earthObj.createPlanet();
-// console.log(Earth);
 earthObj.addOrbits();
 const earthLocation = earthObj.setPlanetOrbitPosition();
 const earth = earthObj.planet;
 
-/**
- * Mars
- */
-
+// Create Mars
 const marsObj = new Planet(
   0.4,
   0,
@@ -279,15 +147,11 @@ const marsObj = new Planet(
   20
 );
 const Mars = marsObj.createPlanet();
-// console.log(mars);
 marsObj.addOrbits();
 const marsLocation = marsObj.setPlanetOrbitPosition();
 const mars = marsObj.planet;
 
-/**
- * Jupiter
- */
-
+// Create Jupiter
 const jupiterObj = new Planet(
   4,
   0,
@@ -300,15 +164,11 @@ const jupiterObj = new Planet(
   -30
 );
 const Jupiter = jupiterObj.createPlanet();
-// console.log(jupiter);
 jupiterObj.addOrbits();
 const jupiterLocation = jupiterObj.setPlanetOrbitPosition();
 const jupiter = jupiterObj.planet;
 
-/**
- * Saturn
- */
-
+// Create Saturn
 const saturnObj = new Planet(
   3,
   4,
@@ -326,10 +186,7 @@ saturnObj.addOrbits();
 const saturnLocation = saturnObj.setPlanetOrbitPosition();
 const saturn = saturnObj.planet;
 
-/**
- * Uranus
- */
-
+// Create Uranus
 const uranusObj = new Planet(
   3,
   4,
@@ -347,10 +204,7 @@ uranusObj.addOrbits();
 const uranusLocation = uranusObj.setPlanetOrbitPosition();
 const uranus = uranusObj.planet;
 
-/**
- * Neptune
- */
-
+// Create Neptune
 const neptuneObj = new Planet(
   4,
   0,
@@ -367,11 +221,10 @@ neptuneObj.addOrbits();
 const neptuneLocation = neptuneObj.setPlanetOrbitPosition();
 const neptune = neptuneObj.planet;
 
-/**
- * Add Planets to the scene
- */
+// Add the Planets to the scene
 scene.add(sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune);
 
+// Store the planet locations in an array
 const planets = [
   sunLocation,
   mercuryLocation,
@@ -384,18 +237,14 @@ const planets = [
   neptuneLocation,
 ];
 
-/**
- * Add Lights to the scene
- */
+// Add Lights to the scene
 const pointLight = new THREE.PointLight(0xffffff, 2, 500);
 pointLight.position.x = 0;
 pointLight.position.y = 0;
 pointLight.position.z = 0;
 scene.add(pointLight);
 
-/**
- * Add Orbital Controls
- */
+// Add Orbital Controls
 let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableZoom = true;
 controls.enablePan = true;
@@ -404,45 +253,79 @@ controls.enableDamping = true;
 controls.zoomSpeed = 0.6;
 controls.panSpeed = 0.5;
 controls.rotateSpeed = 0.4;
+// Set the Orbit controls target
+controls.target.set(0, 0, 0);
 
-/**
- * Add Background Stars
- */
-
+// Create the background stars and add them to the scene
 const stars = createStars();
 scene.add(stars);
 
-// Check out Quokka for auto console.log()
-
-/**
- * Add Asteriod belts
- */
-
+// Create the inner asteroid belt and add it to the scene
 const innerBeltDimensions = {
   innerRadius: 80,
   beltRadius: 10,
 };
-
-const outerBeltDimensions = {
-  innerRadius: 340,
-  beltRadius: 20,
-};
-
 const innerAsteroidBelt = createAsteroidBelt(
   innerBeltDimensions.innerRadius,
   innerBeltDimensions.beltRadius
 );
 scene.add(innerAsteroidBelt);
 
+// Create the outer asteriod belt and add it to the scene
+const outerBeltDimensions = {
+  innerRadius: 340,
+  beltRadius: 20,
+};
 const outerAsteroidBelt = createAsteroidBelt(
   outerBeltDimensions.innerRadius,
   outerBeltDimensions.beltRadius
 );
 scene.add(outerAsteroidBelt);
 
+// Set the camera position
+camera.position.x = 20;
+camera.position.y = 8;
+camera.position.z = 35;
+camera.lookAt(0, 0, 0);
+
 /**
- * Add Responsiveness
+ * @function removeOrbits - hides the planet orbit lines
  */
+function removeOrbits() {
+  for (let i = 1; i <= 8; i++) {
+    scene.children[i].children[
+      scene.children[i].children.length - 1
+    ].material.visible = false;
+  }
+}
+
+// Define the curent state (the application state variable => it determines
+// which planet is in focus)
+let state = [1];
+for (let i = 0; i < planets.length - 1; i++) {
+  state.push(0);
+}
+
+/**
+ * @function animate - animates the render loop of the three.js canvas
+ */
+function animate() {
+  requestAnimationFrame(animate);
+  // cube.rotation.x += 0.01;
+  earth.children[0].rotation.y += 0.003;
+  earth.children[1].rotation.y += 0.0045;
+  mars.children[0].rotation.y += 0.01;
+  jupiter.children[0].rotation.y += 0.001;
+  innerAsteroidBelt.rotation.y += 0.0005;
+  outerAsteroidBelt.rotation.y += 0.0003;
+  renderer.render(scene, camera);
+  TWEEN.update();
+}
+animate();
+
+// --------------------------------------------------------------------------
+// Rerender the canvas on window resize to make it responsive
+// --------------------------------------------------------------------------
 
 const sizes = {
   width: window.innerWidth,
@@ -466,52 +349,9 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
-/**
- * Camera position
- */
-camera.position.x = 20;
-camera.position.y = 8;
-camera.position.z = 35;
-camera.lookAt(0, 0, 0);
-controls.target.set(0, 0, 0);
-
-function removeOrbits() {
-  for (let i = 1; i <= 8; i++) {
-    scene.children[i].children[
-      scene.children[i].children.length - 1
-    ].material.visible = false;
-  }
-}
-
-// Define the curent state
-let state = [1];
-for (let i = 0; i < planets.length - 1; i++) {
-  state.push(0);
-}
-
-nextBtn.addEventListener('click', () => {
-  moveCameraForward(camera, controls, planets, state);
-  updateInfo(state, planets, data);
-});
-
-prevBtn.addEventListener('click', () => {
-  moveCameraBackward(camera, controls, planets, state);
-  updateInfo(state, planets, data);
-});
-
-function animate() {
-  requestAnimationFrame(animate);
-  // cube.rotation.x += 0.01;
-  earth.children[0].rotation.y += 0.003;
-  earth.children[1].rotation.y += 0.0045;
-  mars.children[0].rotation.y += 0.01;
-  jupiter.children[0].rotation.y += 0.001;
-  innerAsteroidBelt.rotation.y += 0.0005;
-  outerAsteroidBelt.rotation.y += 0.0003;
-  renderer.render(scene, camera);
-  TWEEN.update();
-}
-animate();
+// --------------------------------------------------------------------------
+// Fetch the planet data from the Solar Systen OpenData API
+// --------------------------------------------------------------------------
 
 let xhr = new XMLHttpRequest();
 xhr.open('GET', 'https://api.le-systeme-solaire.net/rest/bodies/', true);
@@ -528,6 +368,8 @@ xhr.onload = function () {
       }
     });
 
+    // Select the relevant HTML DOM elements that will display the API data
+    // in the planet info tab
     const planetName = document.querySelector('#planet-name');
     const moons = document.querySelector('#moons');
     const diameter = document.querySelector('#diameter');
@@ -536,10 +378,15 @@ xhr.onload = function () {
     const orbitalPeriod = document.querySelector('#orbital-period');
     const discoveredBy = document.querySelector('#discovered-by');
 
+    // Set the name of the Sun in the planet info tab
     planetName.innerHTML = theSun.englishName;
+    // Check if the selected planet/celestial body is the Sun
     if (theSun.moons === null) {
+      // The selected planet/celestial body is the Sun and therefore has no moons
       moons.innerHTML = '';
     } else {
+      // The selected planet/celestial body is not the Sun. Display the
+      // number of moons the Planet has (if it has moons)
       if (theSun.moons.length > 1) {
         moons.innerHTML = theSun.moons.length + ' moons';
       } else {
@@ -547,16 +394,22 @@ xhr.onload = function () {
       }
     }
 
+    // Display the diameter of the selected planet/celestial body
     diameter.innerHTML =
       '<span id="property-name">Diameter:</span> <br>' +
       theSun.meanRadius * 2 +
       ' km';
+
+    // Display the mass of the selected planet/celestial body
     mass.innerHTML =
       '<span id="property-name">Mass:</span> <br>' +
       theSun.mass.massValue +
       ' x 10<sup>' +
       theSun.mass.massExponent +
       '</sup> kg';
+
+    // Display the gravity of the selected planet/celestial body if it is
+    // provided by the API
     if (theSun.gravity == 0) {
       gravity.innerHTML = '';
     } else {
@@ -565,7 +418,12 @@ xhr.onload = function () {
         theSun.gravity +
         '</span> m.s<sup>-2</sup>';
     }
+
+    // Don't display the orbital period of the Sun
     orbitalPeriod.innerHTML = '';
+
+    // Display the who discovered the selected planet/celestial body if this
+    // data is provided by the API
     if (theSun.discoveredBy == '') {
       discoveredBy.innerHTML = '';
     } else {
@@ -578,15 +436,29 @@ xhr.onload = function () {
     }
   }
 };
-
+// Send the XMLHttpRequest
 xhr.send();
+
+// --------------------------------------------------------------------------
+// Select all the UI buttons and icons that need event listeners
+// --------------------------------------------------------------------------
 
 const infoBtn = document.querySelector('.Info-btn');
 const closeIcon = document.querySelector('#close-icon-1');
 const moreInfoBtn = document.querySelector('.more-info-btn');
 const closeIcon2 = document.querySelector('#close-icon-2');
 const scrollBtn = document.querySelector('#scroll-btn');
+const prevBtn = document.querySelector('#prev-btn');
+const nextBtn = document.querySelector('#next-btn');
 
+// --------------------------------------------------------------------------
+// Define the event handlers
+// --------------------------------------------------------------------------
+
+/**
+ * @function openInfoTab - opens the planet infomation tab and hides the
+ *                         info button
+ */
 function openInfoTab() {
   const infoTab = document.querySelector('#info-tab');
 
@@ -599,6 +471,10 @@ function openInfoTab() {
   infoBtn.style.pointerEvents = 'none';
 }
 
+/**
+ * @function closeInfoTab - closes the planet infomation tab and displays the
+ *                          info button
+ */
 function closeInfoTab() {
   const infoTab = document.querySelector('#info-tab');
 
@@ -611,6 +487,10 @@ function closeInfoTab() {
   infoBtn.style.pointerEvents = 'all';
 }
 
+/**
+ * @function openPlanetInfoTab - opens the specific planet information tab and
+ *                               renders the selected planet in the tab
+ */
 function openPlanetInfoTab() {
   const planetInfoTab = document.querySelector('.planet-info-container');
 
@@ -618,9 +498,13 @@ function openPlanetInfoTab() {
   planetInfoTab.style.top = '1px';
   planetInfoTab.style.height = '100vh';
 
+  // Render the selected planet
   renderPlanet();
 }
 
+/**
+ * @function closePlanetInfoTab - closes the specific planet information tab
+ */
 function closePlanetInfoTab() {
   const planetInfoTab = document.querySelector('.planet-info-container');
 
@@ -628,6 +512,10 @@ function closePlanetInfoTab() {
   planetInfoTab.style.top = '100vh';
   planetInfoTab.style.height = '0';
 }
+
+// --------------------------------------------------------------------------
+// Add event listeners to the selected UI buttons
+// --------------------------------------------------------------------------
 
 infoBtn.addEventListener('click', openInfoTab);
 closeIcon.addEventListener('click', closeInfoTab);
@@ -637,4 +525,12 @@ scrollBtn.addEventListener('click', () => {
   document.querySelector('.main').smoothScroll = scrollFunction(
     document.querySelector('.content-section')
   );
+});
+nextBtn.addEventListener('click', () => {
+  moveCameraForward(camera, controls, planets, state);
+  updateInfo(state, planets, data);
+});
+prevBtn.addEventListener('click', () => {
+  moveCameraBackward(camera, controls, planets, state);
+  updateInfo(state, planets, data);
 });
