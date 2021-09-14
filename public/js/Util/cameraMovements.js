@@ -53,6 +53,11 @@ export function moveCameraForward(camera, controls, planets, state) {
     // Revert to original rotation
     camera.rotation.copy(startRotation);
 
+    // Change the order of rotation of the camera
+    // Rotate about the y-axis first, followed by a rotation about the x-axis
+    // and then a rotation about the z-axis
+    camera.rotation.order = 'YXZ';
+
     // Define the starting point of the camera rotation
     const curQuaternionForRotation = camera.quaternion;
 
@@ -70,7 +75,7 @@ export function moveCameraForward(camera, controls, planets, state) {
           },
           t: 0.01,
         },
-        500
+        1000
       )
       .easing(TWEEN.Easing.Quadratic.InOut)
       .onUpdate(function () {
@@ -91,12 +96,24 @@ export function moveCameraForward(camera, controls, planets, state) {
     // TWEEN animation's .onUpdate function for the camera's posiiton
     const qm = new THREE.Quaternion();
 
-    // Final rotation (with lookAt)
-    camera.position.set(
+    const startingPoint = new THREE.Vector3();
+    const targetPoint = new THREE.Vector3();
+    const destination = new THREE.Vector3();
+    startingPoint.set(coords.x, coords.y, coords.z);
+    targetPoint.set(
       planets[planetIndex + 1].x,
-      planets[planetIndex + 1].y + planets[planetIndex + 1].radius,
-      planets[planetIndex + 1].z + planets[planetIndex + 1].radius * 2
+      planets[planetIndex + 1].y,
+      planets[planetIndex + 1].z
     );
+
+    const dist = planets[planetIndex + 1].radius * 5;
+    destination
+      .subVectors(startingPoint, targetPoint)
+      .setLength(dist)
+      .add(targetPoint);
+
+    // Final rotation (with lookAt)
+    camera.position.set(destination.x, destination.y, destination.z);
     const targetQuaternion = camera.quaternion;
 
     // Revert to original rotation
@@ -110,9 +127,9 @@ export function moveCameraForward(camera, controls, planets, state) {
       .to(
         {
           camera: {
-            x: planets[planetIndex + 1].x,
-            y: planets[planetIndex + 1].y + planets[planetIndex + 1].radius,
-            z: planets[planetIndex + 1].z + planets[planetIndex + 1].radius * 2,
+            x: destination.x,
+            y: destination.y,
+            z: destination.z,
           },
           t: 1,
         },
@@ -239,6 +256,11 @@ export function moveCameraBackward(camera, controls, planets, state) {
     // Revert to original rotation
     camera.rotation.copy(startRotation);
 
+    // Change the order of rotation of the camera
+    // Rotate about the y-axis first, followed by a rotation about the x-axis
+    // and then a rotation about the z-axis
+    camera.rotation.order = 'YXZ';
+
     // The starting point of the camera's rotation
     const curQuaternionForRotation = camera.quaternion;
 
@@ -256,7 +278,7 @@ export function moveCameraBackward(camera, controls, planets, state) {
           },
           t: 0.01,
         },
-        500
+        1000
       )
       .easing(TWEEN.Easing.Quadratic.InOut)
       .onUpdate(function () {
@@ -274,12 +296,24 @@ export function moveCameraBackward(camera, controls, planets, state) {
     // TWEEN animation's .onUpdate function for the camera's position
     const qm = new THREE.Quaternion();
 
-    // Final rotation (with lookAt)
-    camera.position.set(
+    const startingPoint = new THREE.Vector3();
+    const targetPoint = new THREE.Vector3();
+    const destination = new THREE.Vector3();
+    startingPoint.set(coords.x, coords.y, coords.z);
+    targetPoint.set(
       planets[planetIndex - 1].x,
-      planets[planetIndex - 1].y + 0.8,
-      planets[planetIndex - 1].z + planets[planetIndex - 1].radius * 2
+      planets[planetIndex - 1].y,
+      planets[planetIndex - 1].z
     );
+
+    const dist = planets[planetIndex - 1].radius * 5;
+    destination
+      .subVectors(startingPoint, targetPoint)
+      .setLength(dist)
+      .add(targetPoint);
+
+    // Final rotation (with lookAt)
+    camera.position.set(destination.x, destination.y, destination.z);
     const targetQuaternion = camera.quaternion;
 
     // Revert to original rotation
@@ -293,9 +327,9 @@ export function moveCameraBackward(camera, controls, planets, state) {
       .to(
         {
           camera: {
-            x: planets[planetIndex - 1].x,
-            y: planets[planetIndex - 1].y + 0.8,
-            z: planets[planetIndex - 1].z + planets[planetIndex - 1].radius * 2,
+            x: destination.x,
+            y: destination.y,
+            z: destination.z,
           },
           t: 1,
         },

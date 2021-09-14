@@ -246,13 +246,6 @@ scene.add(pointLight);
 
 // Add Orbital Controls
 let controls = new OrbitControls(camera, renderer.domElement);
-controls.enableZoom = true;
-controls.enablePan = true;
-controls.enableRotate = true;
-controls.enableDamping = true;
-controls.zoomSpeed = 0.6;
-controls.panSpeed = 0.5;
-controls.rotateSpeed = 0.4;
 // Set the Orbit controls target
 controls.target.set(0, 0, 0);
 
