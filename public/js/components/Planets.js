@@ -291,7 +291,7 @@ export default class Planet {
     // Define the material for the orbit line
     const planetOrbitMaterial = new THREE.LineBasicMaterial({
       // Add the color of the orbit line to the material
-      color: 0xe3e3e3,
+      color: 0x858585,
     });
 
     // Create the 3D three.js object of the orbit line

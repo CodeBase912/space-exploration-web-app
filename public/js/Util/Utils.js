@@ -1,3 +1,6 @@
+// Import planet content data
+import { planetInfo } from '../planet.js/app.js';
+
 /**
  * @function updateInfo - updates the planet information in the planet info
  *                        tab to the selected planet's data
@@ -90,6 +93,13 @@ export function updateInfo(state, planets, data) {
       planet.discoveryDate +
       ')';
   }
+
+  const activePlanetName = document
+    .querySelector('#planet-name')
+    .innerHTML.toLowerCase();
+  // Update the background image
+  const backgroundImg = document.querySelector('.background-img');
+  backgroundImg.setAttribute('src', planetInfo[activePlanetName].img);
 }
 
 /**
@@ -161,6 +171,9 @@ export function handleInputEvent(
  * @param {number} weight - the weight of the user
  */
 export function saveUserInput(age, weight) {
+  const main = document.getElementsByTagName('main')[0];
+  const userInputContainer = document.querySelector('#user-input-tab');
+  const inputErrorMessage = document.querySelector('#error-msg');
   // Check if either the age of weight is given
   if (age || weight) {
     // Check if the age and weight are numbers

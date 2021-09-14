@@ -375,7 +375,7 @@ main {
   overflow: hidden;
 }
 
-.content-section .img-wrapper .bakcground-img {
+.content-section .img-wrapper .background-img {
   position: absolute;
   width: 500px;
   bottom: 0px;
@@ -573,11 +573,17 @@ main {
 }
 
 @media screen and (max-width: 520px) {
+  .content-section .content-wrapper h1 {
+    font-size: 10vw;
+  }
+}
+
+@media screen and (max-width: 520px) {
   .content-section .img-wrapper {
     width: 80px;
   }
 
-  .content-section .img-wrapper .bakcground-img {
+  .content-section .img-wrapper .background-img {
     width: 100vw;
     height: 100vw;
   }
@@ -597,7 +603,7 @@ main {
   .content-section .img-wrapper {
     width: 20px;
   }
-  .content-section .img-wrapper .bakcground-img {
+  .content-section .img-wrapper .background-img {
     width: 100vw;
     height: 100vw;
   }
