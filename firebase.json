@@ -2,12 +2,7 @@
   "hosting": {
     "site": "solar-exploration",
     "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/tween.js/**",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*"],
     "rewrites": [
       {
         "source": "**",
