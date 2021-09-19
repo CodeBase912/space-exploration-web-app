@@ -1,6 +1,3 @@
-// Import three.js modules
-import * as THREE from './three.module.js';
-import { OrbitControls } from './OrbitControls.js';
 // Import Our Custom component
 import Planet from './components/Planets.js';
 import { createAsteroidBelt } from './components/Asteriods.js';
@@ -75,6 +72,37 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
+
+/** COMPOSER */
+const renderScene = new THREE.RenderPass(scene, camera);
+
+const effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
+effectFXAA.uniforms.resolution.value.set(
+  1 / window.innerWidth,
+  1 / window.innerHeight
+);
+
+const bloomPass = new THREE.UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  1.5,
+  0.4,
+  0.85
+);
+bloomPass.threshold = 0.21;
+bloomPass.strength = 1.2;
+bloomPass.radius = 0.55;
+bloomPass.renderToScreen = true;
+
+const composer = new THREE.EffectComposer(renderer);
+composer.setSize(window.innerWidth, window.innerHeight);
+
+composer.addPass(new THREE.RenderPass(scene, camera));
+composer.addPass(effectFXAA);
+composer.addPass(bloomPass);
+
+renderer.gammaInput = true;
+// renderer.gammaOutput = true;
+renderer.toneMappingExposure = Math.pow(0.9, 4.0);
 
 // Create the Sun
 const sunObj = new Planet(8, 0, 0, 0, 'Sun', '../img/sun.jpg', '', 0, 0);
@@ -245,7 +273,7 @@ pointLight.position.z = 0;
 scene.add(pointLight);
 
 // Add Orbital Controls
-let controls = new OrbitControls(camera, renderer.domElement);
+let controls = new THREE.OrbitControls(camera, renderer.domElement);
 // Set the Orbit controls target
 controls.target.set(0, 0, 0);
 
@@ -311,6 +339,15 @@ function animate() {
   jupiter.children[0].rotation.y += 0.001;
   innerAsteroidBelt.rotation.y += 0.0005;
   outerAsteroidBelt.rotation.y += 0.0003;
+
+  renderer.autoClear = false;
+  renderer.clear();
+
+  camera.layers.set(1);
+  composer.render();
+
+  renderer.clearDepth();
+  camera.layers.set(0);
   renderer.render(scene, camera);
   TWEEN.update();
 }
@@ -338,6 +375,8 @@ window.addEventListener('resize', () => {
   controls.update();
 
   // Update renderer
+
+  composer.setSize(sizes.width, sizes.width);
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });

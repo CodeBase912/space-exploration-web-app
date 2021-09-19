@@ -1,6 +1,3 @@
-// Import the three.js module
-import * as THREE from '../three.module.js';
-
 /**
  * @function createStars - creates the background stars for the three.js scene
  *

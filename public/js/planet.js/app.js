@@ -1,8 +1,3 @@
-// Import three.js modules
-import * as THREE from '../three.module.js';
-import { OrbitControls } from '../OrbitControls.js';
-// Import TWEEN module
-import '../tween.umd.js';
 // Import Custom Components
 import Planet from '../components/Planets.js';
 import { createAsteroidBelt } from '../components/Asteriods.js';
@@ -253,7 +248,7 @@ export function renderPlanet() {
   // Add Orbit Controls
   // --------------------------------------------------------------------------
 
-  let controls = new OrbitControls(camera, renderer.domElement);
+  let controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0, 0);
   controls.enableZoom = false;
   controls.enablePan = false;

@@ -1,6 +1,3 @@
-// Import the three.js module
-import * as THREE from '../three.module.js';
-
 /**
  * @classdesc the Planet class is designed to create a planet, it's orbit lines
  *            and it's rings (it the planet has rings) to be rendered in a
@@ -33,7 +30,7 @@ import * as THREE from '../three.module.js';
  *                                           rotation from the point where:
  *                                           x = 0,
  *                                           y = 0,
- *                                           z = @param position
+ *                                           z = this.position
  *
  */
 export default class Planet {
@@ -70,28 +67,34 @@ export default class Planet {
     if (this.name == 'Sun') {
       // The selected plane/celestial body is the Sun
       // Define the appropriate geometry for the Sun
-      const planetGeometry = new THREE.SphereBufferGeometry(
-        this.planetRadius,
-        64,
-        64
-      );
-      // Define the Sun's material and add it's texture
-      const planetMaterial = new THREE.MeshBasicMaterial();
-      planetMaterial.map = this.planetTexture;
+      // const planetGeometry = new THREE.SphereBufferGeometry(
+      //   this.planetRadius,
+      //   64,
+      //   64
 
-      // Create the Sun's mesh
-      const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+      const color = new THREE.Color('#FDB813');
+      const sunGeometry = new THREE.IcosahedronGeometry(5.5, 15);
+      const sunMaterial = new THREE.MeshBasicMaterial({ color: color });
+      const theSun = new THREE.Mesh(sunGeometry, sunMaterial);
+
+      // Define the Sun's material and add it's texture
+      // const planetMaterial = new THREE.MeshBasicMaterial();
+      // planetMaterial.map = this.planetTexture;
+
+      // // Create the Sun's mesh
+      // const planet = new THREE.Mesh(planetGeometry, planetMaterial);
 
       // Add some properties to the planet
-      planet.name = this.name;
-      planet.castShadow = true;
-      planet.receiveShadow = true;
+      theSun.name = this.name;
+      theSun.castShadow = true;
+      theSun.receiveShadow = true;
+      theSun.layers.enable(1);
 
       // Set the Sun's position
-      planet.position.set(0, 0, this.position);
+      theSun.position.set(0, 0, this.position);
 
       // Add the generated 3D three.js object to the class porperty planet
-      const planetBody = planet;
+      const planetBody = theSun;
       this.planetBody = planetBody;
       this.planet.add(planetBody);
 

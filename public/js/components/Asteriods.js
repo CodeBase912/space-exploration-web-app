@@ -1,6 +1,3 @@
-// Import the three.js module
-import * as THREE from '../three.module.js';
-
 /**
  * @function createAsteroidBelt - creates the asteroid belts in the three.js
  *                                scene. The belt's shaped is a flattened

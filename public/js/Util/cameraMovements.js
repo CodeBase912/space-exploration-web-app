@@ -1,6 +1,3 @@
-import * as THREE from '../three.module.js';
-import '../tween.umd.js';
-
 /**
  * @function moveCameraBackward - smoothly moves the camera to the next outer
  *                                planet from the current in focus/selected
